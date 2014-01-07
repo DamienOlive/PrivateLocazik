@@ -1,0 +1,4 @@
+locazik_categorie:
+    resource: "@LocazikAnnonceBundle/Resources/config/routing.yml"
+    prefix:   /
+

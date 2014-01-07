@@ -1,0 +1,15 @@
+locazik_annonce_homepage:
+    pattern:  /categorie/
+    defaults: { _controller: LocazikAnnonceBundle:Categorie:index }
+    
+locazik_categorie_ajouter:
+    pattern:  /categorie/gerer/
+    defaults: { _controller: LocazikAnnonceBundle:Categorie:gererCategorie }
+    
+locazik_categorie_detail:
+    pattern:  /categorie/detail/{id}/
+    defaults: { _controller: LocazikAnnonceBundle:Categorie:detailCategorie }
+    
+locazik_categorie_modifier:
+    pattern:  /categorie/gerer/{id}/
+    defaults: { _controller: LocazikAnnonceBundle:Categorie:gererCategorie }  

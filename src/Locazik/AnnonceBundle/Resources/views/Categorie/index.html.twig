@@ -1,0 +1,10 @@
+
+
+<html>
+    <body>
+        Voici la liste des catégories : <br />
+        {% for categorie in listeCategories %}
+            <li><a href="{{ path('locazik_categorie_modifier', { 'id': categorie.id }) }}">{{ categorie.categorieName|e }}</a></li>
+        {% endfor %}
+    </body>
+</html>
