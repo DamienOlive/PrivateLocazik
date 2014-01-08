@@ -174,6 +174,27 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
+        if (0 === strpos($pathinfo, '/annonce')) {
+            // locazik_annonce_creer
+            if (rtrim($pathinfo, '/') === '/annonce/creer') {
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'locazik_annonce_creer');
+                }
+
+                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::creerAnnonceAction',  '_route' => 'locazik_annonce_creer',);
+            }
+
+            // locazik_annonce_validation
+            if (0 === strpos($pathinfo, '/annonce/validation') && preg_match('#^/annonce/validation/(?P<id>[^/]++)/?$#s', $pathinfo, $matches)) {
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'locazik_annonce_validation');
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_annonce_validation')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::validerAnnonceAction',));
+            }
+
+        }
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }

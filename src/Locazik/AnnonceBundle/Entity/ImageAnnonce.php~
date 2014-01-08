@@ -14,10 +14,12 @@ class ImageAnnonce
 {
     
     /**
-     * @ORM\ManyToOne(targetEntity="Locazik\AnnonceBundle\Entity\Annonce")
+     * @ORM\ManyToOne(targetEntity="Locazik\AnnonceBundle\Entity\Annonce", inversedBy="imageAnnonces")
      * @ORM\JoinColumn(nullable=false)
      */
     private $annonce;
+    
+    private $file;
     
     /**
      * @var integer
@@ -127,5 +129,52 @@ class ImageAnnonce
     public function getDateUpdate()
     {
         return $this->dateUpdate;
+    }
+
+    /**
+     * Set annonce
+     *
+     * @param \Locazik\AnnonceBundle\Entity\Annonce $annonce
+     * @return ImageAnnonce
+     */
+    public function setAnnonce(\Locazik\AnnonceBundle\Entity\Annonce $annonce)
+    {
+        $this->annonce = $annonce;
+    }
+
+    /**
+     * Get annonce
+     *
+     * @return \Locazik\AnnonceBundle\Entity\Annonce 
+     */
+    public function getAnnonce()
+    {
+        return $this->annonce;
+    }
+   
+    
+    public function upload()
+    {
+        // Si jamais il n'y a pas de fichier (champ facultatif)
+        if (null === $this->file) {
+            return;
+        }
+        
+        $this->imageName = sha1(uniqid(mt_rand(), true)).'.'.$this->file->guessExtension();
+
+        // On déplace le fichier envoyé dans le répertoire de notre choix
+        $this->file->move($this->getUploadRootDir(), $this->imageName);
+      }
+
+    public function getUploadDir()
+    {
+        // On retourne le chemin relatif vers l'image pour un navigateur
+        return 'uploads/img';
+    }
+
+    protected function getUploadRootDir()
+    {
+        // On retourne le chemin relatif vers l'image pour notre code PHP
+        return __DIR__.'/../../../../web/'.$this->getUploadDir();
     }
 }

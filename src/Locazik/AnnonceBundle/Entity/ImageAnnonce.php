@@ -19,6 +19,8 @@ class ImageAnnonce
      */
     private $annonce;
     
+    private $file;
+    
     /**
      * @var integer
      *
@@ -50,6 +52,12 @@ class ImageAnnonce
     private $dateUpdate;
 
 
+    public function __construct()
+    {
+        $this->dateCreation = new \DateTime();
+        $this->dateUpdate = new \DateTime();
+    }
+    
     /**
      * Get id
      *
@@ -105,6 +113,29 @@ class ImageAnnonce
     {
         return $this->dateCreation;
     }
+    
+    /**
+     * Set file
+     *
+     * @param File $file
+     * @return ImageAnnonce
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    /**
+     * Get file
+     *
+     * @return File 
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
 
     /**
      * Set dateUpdate
@@ -148,5 +179,31 @@ class ImageAnnonce
     public function getAnnonce()
     {
         return $this->annonce;
+    }
+   
+    
+    public function upload()
+    {
+        // Si jamais il n'y a pas de fichier (champ facultatif)
+        if (null === $this->file) {
+            return;
+        }
+        
+        $this->imageName = sha1(uniqid(mt_rand(), true)).'.'.$this->file->guessExtension();
+
+        // On déplace le fichier envoyé dans le répertoire de notre choix
+        $this->file->move($this->getUploadRootDir(), $this->imageName);
+      }
+
+    public function getUploadDir()
+    {
+        // On retourne le chemin relatif vers l'image pour un navigateur
+        return 'uploads/img';
+    }
+
+    protected function getUploadRootDir()
+    {
+        // On retourne le chemin relatif vers l'image pour notre code PHP
+        return __DIR__.'/../../../../web/'.$this->getUploadDir();
     }
 }

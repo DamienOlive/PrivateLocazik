@@ -90,6 +90,7 @@ class Annonce
         $this->isOnline = false;
     }
 
+
     /**
      * Get id
      *
@@ -262,47 +263,26 @@ class Annonce
     }
 
     /**
-     * Set categorie
+     * Add imageAnnonces
      *
-     * @param \Locazik\AnnonceBundle\Entity\Categorie $categorie
+     * @param \Locazik\AnnonceBundle\Entity\ImageAnnonce $imageAnnonces
      * @return Annonce
      */
-    public function setCategorie(\Locazik\AnnonceBundle\Entity\Categorie $categorie)
+    public function addImageAnnonce(\Locazik\AnnonceBundle\Entity\ImageAnnonce $imageAnnonces)
     {
-        $this->categorie = $categorie;
-    }
+        $this->imageAnnonces[] = $imageAnnonces;
 
-    /**
-     * Get categorie
-     *
-     * @return \Locazik\AnnonceBundle\Entity\Categorie 
-     */
-    public function getCategorie()
-    {
-        return $this->categorie;
-    }
-
-    /**
-     * Add imageAnnonce
-     *
-     * @param \Locazik\AnnonceBundle\Entity\ImageAnnonce $imageAnnonce
-     * @return Annonce
-     */
-    public function addImageAnnonce(\Locazik\AnnonceBundle\Entity\ImageAnnonce $imageAnnonce)
-    {
-        $this->imageAnnonces[] = $imageAnnonce;
-        $imageAnnonce->setAnnonce($this);
         return $this;
     }
 
     /**
-     * Remove imageAnnonce
+     * Remove imageAnnonces
      *
-     * @param \Locazik\AnnonceBundle\Entity\ImageAnnonce $imageAnnonce
+     * @param \Locazik\AnnonceBundle\Entity\ImageAnnonce $imageAnnonces
      */
-    public function removeImageAnnonce(\Locazik\AnnonceBundle\Entity\ImageAnnonce $imageAnnonce)
+    public function removeImageAnnonce(\Locazik\AnnonceBundle\Entity\ImageAnnonce $imageAnnonces)
     {
-        $this->imageAnnonces->removeElement($imageAnnonce);
+        $this->imageAnnonces->removeElement($imageAnnonces);
     }
 
     /**
@@ -313,5 +293,28 @@ class Annonce
     public function getImageAnnonces()
     {
         return $this->imageAnnonces;
+    }
+
+    /**
+     * Set categorie
+     *
+     * @param \Locazik\AnnonceBundle\Entity\Categorie $categorie
+     * @return Annonce
+     */
+    public function setCategorie(\Locazik\AnnonceBundle\Entity\Categorie $categorie)
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    /**
+     * Get categorie
+     *
+     * @return \Locazik\AnnonceBundle\Entity\Categorie 
+     */
+    public function getCategorie()
+    {
+        return $this->categorie;
     }
 }

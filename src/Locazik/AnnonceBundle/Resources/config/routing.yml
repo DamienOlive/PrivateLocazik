@@ -13,3 +13,13 @@ locazik_categorie_detail:
 locazik_categorie_modifier:
     pattern:  /categorie/gerer/{id}/
     defaults: { _controller: LocazikAnnonceBundle:Categorie:gererCategorie }  
+    
+    
+    
+locazik_annonce_creer:
+    pattern:  /annonce/creer/
+    defaults: { _controller: LocazikAnnonceBundle:Annonce:creerAnnonce } 
+    
+locazik_annonce_validation:
+    pattern:  /annonce/validation/{id}/
+    defaults: { _controller: LocazikAnnonceBundle:Annonce:validerAnnonce } 

@@ -17,6 +17,8 @@ class Annonce
     */
     private $imageAnnonces;
     
+    private $file;
+    
     /**
      * @ORM\ManyToOne(targetEntity="Locazik\AnnonceBundle\Entity\Categorie", inversedBy="annonces")
      * @ORM\JoinColumn(nullable=false)
@@ -87,8 +89,9 @@ class Annonce
     {
         $this->dateCreation = new \Datetime();
         $this->dateUpdate = new \Datetime();
-        $this->isOnline = 0;
+        $this->isOnline = false;
     }
+
 
     /**
      * Get id
@@ -262,6 +265,39 @@ class Annonce
     }
 
     /**
+     * Add imageAnnonces
+     *
+     * @param \Locazik\AnnonceBundle\Entity\ImageAnnonce $imageAnnonces
+     * @return Annonce
+     */
+    public function addImageAnnonce(\Locazik\AnnonceBundle\Entity\ImageAnnonce $imageAnnonces)
+    {
+        $this->imageAnnonces[] = $imageAnnonces;
+
+        return $this;
+    }
+
+    /**
+     * Remove imageAnnonces
+     *
+     * @param \Locazik\AnnonceBundle\Entity\ImageAnnonce $imageAnnonces
+     */
+    public function removeImageAnnonce(\Locazik\AnnonceBundle\Entity\ImageAnnonce $imageAnnonces)
+    {
+        $this->imageAnnonces->removeElement($imageAnnonces);
+    }
+
+    /**
+     * Get imageAnnonces
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getImageAnnonces()
+    {
+        return $this->imageAnnonces;
+    }
+
+    /**
      * Set categorie
      *
      * @param \Locazik\AnnonceBundle\Entity\Categorie $categorie
@@ -270,6 +306,8 @@ class Annonce
     public function setCategorie(\Locazik\AnnonceBundle\Entity\Categorie $categorie)
     {
         $this->categorie = $categorie;
+
+        return $this;
     }
 
     /**
