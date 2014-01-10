@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Annonce
 {
     /**
-     * @ORM\OneToMany(targetEntity="Locazik\AnnonceBundle\Entity\ImageAnnonce", mappedBy="annonce")
+     * @ORM\OneToMany(targetEntity="Locazik\AnnonceBundle\Entity\ImageAnnonce", mappedBy="annonce", cascade={"persist", "remove"})
     */
     private $imageAnnonces;
     
@@ -71,14 +71,14 @@ class Annonce
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dateCreation", type="date")
+     * @ORM\Column(name="dateCreation", type="datetime")
      */
     private $dateCreation;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dateUpdate", type="date")
+     * @ORM\Column(name="dateUpdate", type="datetime")
      */
     private $dateUpdate;
 

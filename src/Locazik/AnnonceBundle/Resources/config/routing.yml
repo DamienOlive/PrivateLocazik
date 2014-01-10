@@ -21,5 +21,23 @@ locazik_annonce_creer:
     defaults: { _controller: LocazikAnnonceBundle:Annonce:creerAnnonce } 
     
 locazik_annonce_validation:
-    pattern:  /annonce/validation/{id}/
+    pattern:  /annonce/valider/{id}/
     defaults: { _controller: LocazikAnnonceBundle:Annonce:validerAnnonce } 
+    
+locazik_annonce_supprimer:
+    pattern:  /annonce/supprimer/{id}/
+    defaults: { _controller: LocazikAnnonceBundle:Annonce:supprimerAnnonce } 
+    
+    
+    
+locazik_mot_creer:
+    pattern:  /mot-interdit/creer/
+    defaults: { _controller: LocazikAnnonceBundle:MotInterdit:creerMot } 
+    
+locazik_mot_lister:
+    pattern:  /mot-interdit/lister/
+    defaults: { _controller: LocazikAnnonceBundle:MotInterdit:listerMot } 
+    
+locazik_mot_supprimer:
+    pattern:  /mot-interdit/supprimer/{id}/
+    defaults: { _controller: LocazikAnnonceBundle:MotInterdit:supprimerMot } 

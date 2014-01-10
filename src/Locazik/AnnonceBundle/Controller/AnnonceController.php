@@ -33,29 +33,17 @@ class AnnonceController extends Controller
                 // possibilité d'upload plusieurs fichiers
                 foreach($imageAnnonces as $imageAnnonce)
                 {
+                    $imageAnnonce->setAnnonce($annonce);
                     $imageAnnonce->upload();
                 }
                 
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($annonce);
-                //$entityManager->persist($image);
                 $entityManager->flush();
                 return $this->render('LocazikAnnonceBundle:Annonce:confirmationCreation.html.twig');
             }
         }
         
-        /*
-        $annonce->setAnnonceName('Location de guitare fender');
-        $annonce->setAnnonceDesc('Cette guitare est vraiment superbe, je vous la conseille vivement!');
-        $annonce->setAnnoncePrix(19.70);
-        $annonce->setAnnonceCp('66180');
-        
-        // TODO : Upload fichier + traitement
-        $image = new ImageAnnonce();
-        $image->setImageName('temp.jpg');
-        
-        $annonce->addImageAnnonce($image);
-        */
         return $this->render('LocazikAnnonceBundle:Annonce:creer.html.twig', array('form' => $form->createView()));
         
     }
@@ -87,6 +75,18 @@ class AnnonceController extends Controller
         }
         
         return $this->render('LocazikAnnonceBundle:Annonce:validation.html.twig', array('form' => $form->createView()));
+    }
+    
+    public function supprimerAnnonceAction($id)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $annonceRepository = $entityManager->getRepository('LocazikAnnonceBundle:Annonce');
+        $annonce = $annonceRepository->find($id);
+        
+        $entityManager->remove($annonce);
+        $entityManager->flush();
+        
+        return $this->render('LocazikAnnonceBundle:Annonce:listeAnnonces.html.twig');
     }
     
 }

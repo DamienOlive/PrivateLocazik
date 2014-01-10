@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class ImageAnnonce
 {
@@ -20,6 +21,8 @@ class ImageAnnonce
     private $annonce;
     
     private $file;
+    
+    private $tempFilename;
     
     /**
      * @var integer
@@ -33,7 +36,7 @@ class ImageAnnonce
     /**
      * @var string
      *
-     * @ORM\Column(name="ImageName", type="string", length=20)
+     * @ORM\Column(name="ImageName", type="string", length=80)
      */
     private $imageName;
 
@@ -52,6 +55,12 @@ class ImageAnnonce
     private $dateUpdate;
 
 
+    public function __construct()
+    {
+        $this->dateCreation = new \DateTime();
+        $this->dateUpdate = new \DateTime();
+    }
+    
     /**
      * Get id
      *
@@ -107,6 +116,29 @@ class ImageAnnonce
     {
         return $this->dateCreation;
     }
+    
+    /**
+     * Set file
+     *
+     * @param File $file
+     * @return ImageAnnonce
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    /**
+     * Get file
+     *
+     * @return File 
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
 
     /**
      * Set dateUpdate
@@ -156,7 +188,7 @@ class ImageAnnonce
     public function upload()
     {
         // Si jamais il n'y a pas de fichier (champ facultatif)
-        if (null === $this->file) {
+        if ($this->file === null) {
             return;
         }
         
@@ -177,4 +209,28 @@ class ImageAnnonce
         // On retourne le chemin relatif vers l'image pour notre code PHP
         return __DIR__.'/../../../../web/'.$this->getUploadDir();
     }
+    
+    /**
+     * @ORM\PreRemove()
+    */
+    public function preRemoveUpload()
+    {
+        // On sauvegarde temporairement le nom du fichier, car il dépend de l'id
+        $this->tempFilename = $this->getUploadRootDir().'/'.$this->imageName;
+        var_dump($this->tempFilename);
+    }
+
+    /**
+     * @ORM\PostRemove()
+    */
+    public function removeUpload()
+    {
+        // En PostRemove, on n'a pas accès à l'id, on utilise notre nom sauvegardé
+        var_dump('removeUpload', $this->tempFilename);
+        if (file_exists($this->tempFilename)) {
+            // On supprime le fichier
+            unlink($this->tempFilename);
+        }
+    }
+    
 }

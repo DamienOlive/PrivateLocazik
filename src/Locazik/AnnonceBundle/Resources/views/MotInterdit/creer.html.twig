@@ -1,0 +1,23 @@
+{% extends "::base.html.twig" %}
+
+{% block title %} {{ parent() }} - Ajouter un mot interdit{% endblock %}
+
+{% block body %}
+<h1>Ajouter un mot interdit</h1>
+<p>
+    Pourquoi ajouter un mot interdit ?<br />
+    Le but est d'éviter que les utilisateurs n'insèrent des insultes, 
+    des propos diffamatoires ou incompatible avec la charte du site.<br />
+    Ce filtre permet ainsi de bloquer certaines annonces indésirables.
+</p>
+
+<div class="well">
+    {# Les erreurs générales du formulaire. #}
+    {{ form_errors(form) }}
+    <form method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <input type="submit" class="btn btn-primary" />
+    </form>
+</div>
+
+{% endblock %}

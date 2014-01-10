@@ -3,12 +3,14 @@
 namespace Locazik\AnnonceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * ImageAnnonce
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class ImageAnnonce
 {
@@ -19,7 +21,12 @@ class ImageAnnonce
      */
     private $annonce;
     
+    /**
+     * @Assert\File()
+     */
     private $file;
+    
+    private $tempFilename;
     
     /**
      * @var integer
@@ -33,21 +40,21 @@ class ImageAnnonce
     /**
      * @var string
      *
-     * @ORM\Column(name="ImageName", type="string", length=20)
+     * @ORM\Column(name="ImageName", type="string", length=80)
      */
     private $imageName;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="DateCreation", type="date")
+     * @ORM\Column(name="DateCreation", type="datetime")
      */
     private $dateCreation;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="DateUpdate", type="date")
+     * @ORM\Column(name="DateUpdate", type="datetime")
      */
     private $dateUpdate;
 
@@ -185,7 +192,7 @@ class ImageAnnonce
     public function upload()
     {
         // Si jamais il n'y a pas de fichier (champ facultatif)
-        if (null === $this->file) {
+        if ($this->file === null) {
             return;
         }
         
@@ -206,4 +213,26 @@ class ImageAnnonce
         // On retourne le chemin relatif vers l'image pour notre code PHP
         return __DIR__.'/../../../../web/'.$this->getUploadDir();
     }
+    
+    /**
+     * @ORM\PreRemove()
+    */
+    public function preRemoveUpload()
+    {
+        // On sauvegarde temporairement le nom du fichier, car il dépend de l'id
+        $this->tempFilename = $this->getUploadRootDir().'/'.$this->imageName;
+    }
+
+    /**
+     * @ORM\PostRemove()
+    */
+    public function removeUpload()
+    {
+        // En PostRemove, on n'a pas accès à l'id, on utilise notre nom sauvegardé
+        if (file_exists($this->tempFilename)) {
+            // On supprime le fichier
+            unlink($this->tempFilename);
+        }
+    }
+    
 }

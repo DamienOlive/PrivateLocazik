@@ -15,10 +15,13 @@ class CategorieType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('categorieName', 'text')
-            ->add('categorieDesc', 'textarea')
+            ->add('categorieName', 'text', array('label' => 'Nom de la catégorie'))
+            ->add('categorieDesc', 'textarea', array('label' => 'Description de la catégorie'))
             ->add('categorieParentId', 'choice', array('required' => false))
-            ->add('isOnline', 'checkbox', array('required' => false))
+            /*->add('categorieParentId', 'entity', array(
+                  'class'    => 'LocazikAnnonceBundle:Categorie',
+                  'property' => 'categorieName'))*/
+            ->add('isOnline', 'checkbox', array('required' => false, 'label' => 'Cocher la case si vous souhaitez mettre en ligne'))
         ;
     }
     

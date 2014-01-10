@@ -37,7 +37,9 @@ class CategorieController extends Controller
         
         if ($request->getMethod() === 'POST')
         {
+            
             $form->bind($request);
+            var_dump($categorie);//exit();
             if(!$categorie->getCategorieParentId())
             {
                 $categorie->setCategorieParentId(0);

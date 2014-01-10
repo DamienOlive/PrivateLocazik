@@ -3,6 +3,7 @@
 namespace Locazik\AnnonceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Categorie
@@ -30,6 +31,7 @@ class Categorie
      * @var string
      *
      * @ORM\Column(name="CategorieName", type="string", length=80)
+     * @Assert\Length(min=5, minMessage="Le titre doit faire au moins {{ limit }} caractères.")
      */
     private $categorieName;
 
@@ -37,6 +39,7 @@ class Categorie
      * @var string
      *
      * @ORM\Column(name="CategorieDesc", type="text")
+     * @Assert\Length(min=20, minMessage="La description doit faire au moins {{ limit }} caractères.")
      */
     private $categorieDesc;
 
@@ -57,14 +60,14 @@ class Categorie
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="DateCreation", type="date")
+     * @ORM\Column(name="DateCreation", type="datetime")
      */
     private $dateCreation;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="DateUpdate", type="date")
+     * @ORM\Column(name="DateUpdate", type="datetime")
      */
     private $dateUpdate;
     

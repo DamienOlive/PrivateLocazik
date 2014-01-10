@@ -13,11 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Annonce
 {
     /**
-     * @ORM\OneToMany(targetEntity="Locazik\AnnonceBundle\Entity\ImageAnnonce", mappedBy="annonce")
+     * @ORM\OneToMany(targetEntity="Locazik\AnnonceBundle\Entity\ImageAnnonce", mappedBy="annonce", cascade={"persist", "remove"})
     */
     private $imageAnnonces;
-    
-    private $file;
     
     /**
      * @ORM\ManyToOne(targetEntity="Locazik\AnnonceBundle\Entity\Categorie", inversedBy="annonces")

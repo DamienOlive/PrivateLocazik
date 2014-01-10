@@ -21,8 +21,7 @@ class AnnonceType extends AbstractType
             ->add('annonceCp', 'text')
             ->add('categorie', 'entity', array(
                   'class'    => 'LocazikAnnonceBundle:Categorie',
-                  'property' => 'categorieName',
-                  'multiple' => false))
+                  'property' => 'categorieName'))
             ->add('imageAnnonces', 'collection', 
                     array('type' => new ImageAnnonceType(),
                         'allow_add'    => true, 

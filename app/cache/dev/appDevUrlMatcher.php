@@ -185,12 +185,51 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             }
 
             // locazik_annonce_validation
-            if (0 === strpos($pathinfo, '/annonce/validation') && preg_match('#^/annonce/validation/(?P<id>[^/]++)/?$#s', $pathinfo, $matches)) {
+            if (0 === strpos($pathinfo, '/annonce/valider') && preg_match('#^/annonce/valider/(?P<id>[^/]++)/?$#s', $pathinfo, $matches)) {
                 if (substr($pathinfo, -1) !== '/') {
                     return $this->redirect($pathinfo.'/', 'locazik_annonce_validation');
                 }
 
                 return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_annonce_validation')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::validerAnnonceAction',));
+            }
+
+            // locazik_annonce_supprimer
+            if (0 === strpos($pathinfo, '/annonce/supprimer') && preg_match('#^/annonce/supprimer/(?P<id>[^/]++)/?$#s', $pathinfo, $matches)) {
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'locazik_annonce_supprimer');
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_annonce_supprimer')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::supprimerAnnonceAction',));
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/mot-interdit')) {
+            // locazik_mot_creer
+            if (rtrim($pathinfo, '/') === '/mot-interdit/creer') {
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'locazik_mot_creer');
+                }
+
+                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\MotInterditController::creerMotAction',  '_route' => 'locazik_mot_creer',);
+            }
+
+            // locazik_mot_lister
+            if (rtrim($pathinfo, '/') === '/mot-interdit/lister') {
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'locazik_mot_lister');
+                }
+
+                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\MotInterditController::listerMotAction',  '_route' => 'locazik_mot_lister',);
+            }
+
+            // locazik_mot_supprimer
+            if (0 === strpos($pathinfo, '/mot-interdit/supprimer') && preg_match('#^/mot\\-interdit/supprimer/(?P<id>[^/]++)/?$#s', $pathinfo, $matches)) {
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'locazik_mot_supprimer');
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_mot_supprimer')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\MotInterditController::supprimerMotAction',));
             }
 
         }
