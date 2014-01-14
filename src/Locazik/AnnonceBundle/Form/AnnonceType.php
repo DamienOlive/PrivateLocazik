@@ -15,17 +15,24 @@ class AnnonceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('annonceName', 'text')
-            ->add('annonceDesc', 'textarea')
-            ->add('annoncePrix', 'text')
+            ->add('annonceName', 'text', array('label' => 'Titre de l\'annonce :'))
+            ->add('annonceDesc', 'textarea', array('label' => 'Texte de l\'annonce :'))
+            ->add('annoncePrix', 'text', array('label' => 'Prix à la journée :'))
             ->add('annonceCp', 'text')
+            /*->add('categorie', 'entity', array(
+                  'class'    => 'LocazikAnnonceBundle:Categorie',
+                  'property' => 'categorieName'))*/
             ->add('categorie', 'entity', array(
                   'class'    => 'LocazikAnnonceBundle:Categorie',
-                  'property' => 'categorieName'))
+                  'property' => 'categorieName',
+                  'query_builder' => function(\Locazik\AnnonceBundle\Entity\CategorieRepository $c) {
+                    return $c->listeCategorieOnline();
+                  }))
             ->add('imageAnnonces', 'collection', 
                     array('type' => new ImageAnnonceType(),
                         'allow_add'    => true, 
-                        'allow_delete' => true))
+                        'allow_delete' => true,
+                        'label' => 'Photos : Une annonce avec photo est 8 fois plus consultée qu\'une annonce sans photo'))
         ;
     }
     

@@ -15,7 +15,7 @@ class AnnonceValidationType extends AnnonceType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $builder->add('isOnline', 'checkbox');
+        $builder->add('isOnline', 'checkbox', array('label' => 'Mettre en ligne : '));
     }
 
     /**

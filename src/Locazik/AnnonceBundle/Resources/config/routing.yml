@@ -1,6 +1,6 @@
-locazik_annonce_homepage:
-    pattern:  /categorie/
-    defaults: { _controller: LocazikAnnonceBundle:Categorie:index }
+locazik_categorie_lister:
+    pattern:  /categorie/lister/
+    defaults: { _controller: LocazikAnnonceBundle:Categorie:listerCategorie }
     
 locazik_categorie_ajouter:
     pattern:  /categorie/gerer/
@@ -12,7 +12,11 @@ locazik_categorie_detail:
     
 locazik_categorie_modifier:
     pattern:  /categorie/gerer/{id}/
-    defaults: { _controller: LocazikAnnonceBundle:Categorie:gererCategorie }  
+    defaults: { _controller: LocazikAnnonceBundle:Categorie:gererCategorie }
+    
+locazik_categorie_supprimer:
+    pattern:  /categorie/supprimer/
+    defaults: { _controller: LocazikAnnonceBundle:Categorie:ajaxSupprimerCategorie }  
     
     
     
@@ -28,6 +32,18 @@ locazik_annonce_supprimer:
     pattern:  /annonce/supprimer/{id}/
     defaults: { _controller: LocazikAnnonceBundle:Annonce:supprimerAnnonce } 
     
+locazik_annonce_confirmer:
+    pattern:  /annonce/confirmer/
+    defaults: { _controller: LocazikAnnonceBundle:Annonce:confirmerCreationAnnonce }
+  
+locazik_annonce_lister:
+    pattern:  /annonce/lister/
+    defaults: { _controller: LocazikAnnonceBundle:Annonce:listerAnnonce }   
+ 
+locazik_annonce_detail:
+    pattern:  /annonce/detail/{id}/
+    defaults: { _controller: LocazikAnnonceBundle:Annonce:detailAnnonce }
+    
     
     
 locazik_mot_creer:
@@ -39,5 +55,5 @@ locazik_mot_lister:
     defaults: { _controller: LocazikAnnonceBundle:MotInterdit:listerMot } 
     
 locazik_mot_supprimer:
-    pattern:  /mot-interdit/supprimer/{id}/
-    defaults: { _controller: LocazikAnnonceBundle:MotInterdit:supprimerMot } 
+    pattern:  /mot-interdit/supprimer/
+    defaults: { _controller: LocazikAnnonceBundle:MotInterdit:ajaxSupprimerMot } 

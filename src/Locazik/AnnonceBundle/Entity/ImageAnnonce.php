@@ -187,7 +187,6 @@ class ImageAnnonce
     {
         return $this->annonce;
     }
-   
     
     public function upload()
     {
@@ -200,12 +199,12 @@ class ImageAnnonce
 
         // On déplace le fichier envoyé dans le répertoire de notre choix
         $this->file->move($this->getUploadRootDir(), $this->imageName);
-      }
+    }
 
     public function getUploadDir()
     {
         // On retourne le chemin relatif vers l'image pour un navigateur
-        return 'uploads/img';
+        return 'uploads/img/';
     }
 
     protected function getUploadRootDir()

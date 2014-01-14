@@ -1,0 +1,14 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}{{ parent() }} Liste annonces{% endblock %}
+
+{% block body %}
+<h2>Liste des annonces</h2>
+
+    {% for annonce in listeAnnonces %}
+        <li><a href="{{ path('locazik_annonce_detail', { 'id': annonce.id }) }}">{{ annonce.annonceName|e }}</a></li>
+    {% endfor %}
+    
+    <a href="{{path('locazik_annonce_creer') }}">Ajouter des annonces</a>
+
+{% endblock %}

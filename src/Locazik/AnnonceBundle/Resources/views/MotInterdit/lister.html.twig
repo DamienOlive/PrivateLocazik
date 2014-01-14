@@ -1,0 +1,66 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}{{ parent() }} Liste des mots interdits{% endblock %}
+
+{% block body %}
+<h2>Liste des mots interdits</h2>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Mot interdit</th>
+            <th>Supprimer</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for motInterdit in listeMotsInterdits %}
+        <tr id="{{ 'line_'~motInterdit.id }}">
+            <td>
+                <a href="{{ path('locazik_mot_supprimer', { 'id': motInterdit.id }) }}">
+                    {{ motInterdit.mot|e }}
+                </a>
+            </td>
+            <td>
+                <input type="button" value="Supprimer" onclick="removeMotInterditConfirm({{motInterdit.id}});" class="btn btn-danger btn-default remove_fields" />
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<br />
+<a href="{{path('locazik_mot_creer') }}" class="btn btn-info btn-default">Ajouter un mot interdit <i class="icon-plus"></i></a>
+
+
+
+{% block javascripts %}
+{{ parent() }}
+{% endblock %}
+<script type="text/javascript">
+    var removeMotInterditConfirm = function(id) {
+        BootstrapDialog.show({
+            type: BootstrapDialog.TYPE_DANGER,
+            title: 'Confirmation',
+            message: 'Etes-vous sur de vouloir supprimer l\'enregistrement ?',
+            buttons: [{
+                label: 'Annuler',
+                action: function(dialogRef){    
+                    dialogRef.close();
+                }
+            }, {
+                cssClass: 'btn-danger',
+                label: 'Confirmer',
+                action: function(dialogRef){    
+                    removeMotInterdit(id);
+                    dialogRef.close();
+                }
+            }]
+        }); 
+    }
+    
+    var removeMotInterdit = function (id) {
+        $.post( "{{ path('locazik_mot_supprimer') }}", { id: id } );
+        $('#line_'+id).slideUp();
+    }
+</script>
+
+{% endblock %}

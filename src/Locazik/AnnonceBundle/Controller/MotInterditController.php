@@ -5,6 +5,7 @@ namespace Locazik\AnnonceBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Locazik\AnnonceBundle\Entity\MotInterdit;
 use Locazik\AnnonceBundle\Form\MotInterditType;
+use Symfony\Component\HttpFoundation\Response;
 
 class MotInterditController extends Controller
 {
@@ -24,7 +25,6 @@ class MotInterditController extends Controller
                 $entityManager->flush();
             }
             return $this->redirect($this->generateUrl('locazik_mot_lister'));
-            //$this->render('LocazikAnnonceBundle:MotInterdit:liste.html.twig', array('listeMotsInterdits' => $listeMotsInterdits));
         }
         return $this->render('LocazikAnnonceBundle:MotInterdit:creer.html.twig', array('form' => $form->createView()));
     }
@@ -32,19 +32,32 @@ class MotInterditController extends Controller
     public function listerMotAction()
     {
         $listeMotsInterdits = $this->getListeMotsInterdits();
-        return $this->render('LocazikAnnonceBundle:MotInterdit:liste.html.twig', array('listeMotsInterdits' => $listeMotsInterdits));
+        return $this->render('LocazikAnnonceBundle:MotInterdit:lister.html.twig', array('listeMotsInterdits' => $listeMotsInterdits));
     }
 
-    public function supprimerMotAction($id)
+    public function ajaxSupprimerMotAction()
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $motInterditRepository = $entityManager->getRepository('LocazikAnnonceBundle:MotInterdit');
-        $motInterdit = $motInterditRepository->find($id);
-        $entityManager->remove($motInterdit);
-        $entityManager->flush();
-        
-        return $this->redirect($this->generateUrl('locazik_mot_lister'));
-        //return $this->render('LocazikAnnonceBundle:MotInterdit:liste.html.twig', array('listeMotsInterdits' => $listeMotsInterdits));        
+        $isAjax = $this->get('request')->isXMLHttpRequest();
+        $id = $this->get('request')->request->get('id');
+        if($isAjax)
+        {
+            if($id != null)
+            {
+                $entityManager = $this->getDoctrine()->getManager();
+                $motInterditRepository = $entityManager->getRepository('LocazikAnnonceBundle:MotInterdit');
+                $motInterdit = $motInterditRepository->find($id);
+                $entityManager->remove($motInterdit);
+                $entityManager->flush();
+            
+                $response = new Response(json_encode(array('result' => 'success')));
+            }
+            else
+            {
+                $response = new Response(json_encode(array('result' => 'failure')));
+            }
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+        }
     }
 
     private function getListeMotsInterdits()

@@ -3,6 +3,7 @@
 namespace Locazik\AnnonceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Categorie
@@ -30,6 +31,7 @@ class Categorie
      * @var string
      *
      * @ORM\Column(name="CategorieName", type="string", length=80)
+     * @Assert\Length(min=5, minMessage="Le titre doit faire au moins {{ limit }} caractères.")
      */
     private $categorieName;
 
@@ -37,16 +39,25 @@ class Categorie
      * @var string
      *
      * @ORM\Column(name="CategorieDesc", type="text")
+     * @Assert\Length(min=20, minMessage="La description doit faire au moins {{ limit }} caractères.")
      */
     private $categorieDesc;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="CategorieParentId", type="integer")
-     */
-    private $categorieParentId;
+     * @ORM\ManyToOne(targetEntity="Categorie", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+    */
+    private $parent;
 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Categorie", mappedBy="parent")
+    */
+    protected $children;
+    
+    
     /**
      * @var boolean
      *
@@ -57,14 +68,14 @@ class Categorie
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="DateCreation", type="date")
+     * @ORM\Column(name="DateCreation", type="datetime")
      */
     private $dateCreation;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="DateUpdate", type="date")
+     * @ORM\Column(name="DateUpdate", type="datetime")
      */
     private $dateUpdate;
     
@@ -74,8 +85,9 @@ class Categorie
     {
         $this->dateCreation = new \Datetime();
         $this->dateUpdate = new \Datetime();
-        $this->isOnline = 0;
-        $this->categorieParentId = 0;
+        $this->isOnline = false;
+        $this->categorieParentId = false;
+        $this->annonces = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -248,5 +260,24 @@ class Categorie
     {
         return $this->isOnline;
     }
-    
+
+    /**
+     * Remove annonce
+     *
+     * @param \Locazik\AnnonceBundle\Entity\Annonce $annonce
+     */
+    public function removeAnnonce(\Locazik\AnnonceBundle\Entity\Annonce $annonce)
+    {
+        $this->annonces->removeElement($annonce);
+    }
+
+    /**
+     * Get annonces
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAnnonces()
+    {
+        return $this->annonces;
+    }
 }

@@ -1,0 +1,18 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}{{ parent() }} - Détail Annonce{% endblock %}
+
+{% block body %}
+Détail : <br />
+<a href="{{ path('locazik_categorie_modifier', { 'id': annonce.id }) }}">{{ annonce.annonceName }}</a><br />
+<strong>Description :</strong> <br /> {{ annonce.annonceDesc }}<br />
+<strong>Prix à la journée : </strong> {{ annonce.annoncePrix }}€ <br />
+
+{% for image in annonce.getImageAnnonces() %}
+    <img src="{{ asset(image.getUploadDir()~image.getImageName()) }}" width="300" />
+{% endfor %}
+<br />
+
+<strong>Date de publication :</strong> {{ annonce.dateCreation|date('d-m-Y') }} <br />
+<strong>Date de mise à jour</strong> {{ annonce.dateUpdate|date('d-m-Y') }}
+{% endblock %}

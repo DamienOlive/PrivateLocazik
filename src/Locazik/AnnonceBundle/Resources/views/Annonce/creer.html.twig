@@ -6,12 +6,14 @@
 
 {% block body %}
 <div class="well">
-    
+
     {# Les erreurs générales du formulaire. #}
     {{ form_errors(form) }}
     <form method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
-        <input type="submit" class="btn btn-primary" />
+        <div style="clear:both;"></div>
+        <br />
+        <input type="submit" class="btn btn-info" />
     </form>
 </div>
 
@@ -21,68 +23,109 @@
 
 {# Voici le script en question : #}
 <script type="text/javascript">
-$(document).ready(function() {
-  // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
-  var $container = $('div#locazik_annoncebundle_annonce_imageAnnonces');
+    $(document).ready(function() {
 
-  // On ajoute un lien pour ajouter une nouvelle catégorie
-  var $lienAjout = $('<a href="#" id="ajout_categorie" class="btn">Ajouter une catégorie</a>');
-  $container.append($lienAjout);
+        // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
+        var $container = $('div#locazik_annoncebundle_annonce_imageAnnonces');
 
-  // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
-  $lienAjout.click(function(e) {
-    ajouterCategorie($container);
-    e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-    return false;
-  });
+        // On ajoute un lien pour ajouter une nouvelle photo
+        var $lienAjout = $('<a href="#" id="ajout_photo" class="btn">Ajouter une photo</a><br /><br />');
+        $container.append($lienAjout);
 
-  // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
-  var index = $container.find(':input').length;
+        // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
+        $lienAjout.click(function(e) {
+            if (index + 1 <= 3)
+            {
+                ajouterPhoto($container);
+                e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+                return false;
+            }
+        });
 
-  // On ajoute un premier champ directement s'il n'en existe pas déjà un (cas d'un nouvel article par exemple).
-  if (index == 0) {
-    ajouterCategorie($container);
-  } else {
-    // Pour chaque catégorie déjà existante, on ajoute un lien de suppression
-    $container.children('div').each(function() {
-      ajouterLienSuppression($(this));
+        // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
+        var index = $container.find(':input').length;
+
+        // On ajoute un premier champ directement s'il n'en existe pas déjà un (cas d'un nouvel article par exemple).
+        if (index == 0 && index < 3) {
+            //alert($container.children('div').addClass('photoAnnonce'));
+            ajouterPhoto($container);
+        } else {
+            // Pour chaque photo déjà existante, on ajoute un lien de suppression
+            $container.children('div').each(function() {
+                ajouterLienSuppression($(this));
+            });
+        }
+
+
+        function ajouterPhoto($container) {
+            // Dans le contenu de l'attribut « data-prototype », on remplace :
+            // - le texte "__name__label__" qu'il contient par le label du champ
+            // - le texte "__name__" qu'il contient par le numéro du champ
+            var $prototype = $($container.attr('data-prototype').replace(/__name__label__/g, 'Photo n°' + (index + 1))
+                    .replace(/__name__/g, index));
+
+            // On ajoute au prototype un lien pour pouvoir supprimer la photo
+            ajouterLienSuppression($prototype);
+
+            // On ajoute le prototype modifié à la fin de la balise <div>
+            $container.append($prototype);
+            $container.children('div').addClass('photoAnnonce');
+
+            // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
+            index++;
+
+            if (index < 3) {
+                $('#ajout_photo').show();
+            } else {
+                $('#ajout_photo').hide();
+            }
+
+            $('input:file').change(function() {
+                readURL(this);
+            });
+        }
+
+        // La fonction qui ajoute un lien de suppression d'une catégorie
+        function ajouterLienSuppression($prototype) {
+            // Création du lien
+            $photoAnnonce = $("<img src='{{ asset('bundles/locazikannonce/images/photoAnnonce.jpg') }}' id='photoAnnonce_" + (index) + "' width='160' height='120' /><br />");
+            $lienSuppression = $('<a href="#" class="btn btn-danger">Supprimer</a>');
+
+            // Ajout du lien
+            $prototype.append($photoAnnonce);
+            $prototype.append($lienSuppression);
+
+            // Ajout du listener sur le clic du lien
+            $lienSuppression.click(function(e) {
+                index--;
+                if (index < 3) {
+                    $('#ajout_photo').show();
+                } else {
+                    $('#ajout_photo').hide();
+                }
+                $prototype.remove();
+                e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+                return false;
+            });
+        }
     });
-  }
 
-  // La fonction qui ajoute un formulaire Categorie
-  function ajouterCategorie($container) {
-    // Dans le contenu de l'attribut « data-prototype », on remplace :
-    // - le texte "__name__label__" qu'il contient par le label du champ
-    // - le texte "__name__" qu'il contient par le numéro du champ
-    var $prototype = $($container.attr('data-prototype').replace(/__name__label__/g, 'Catégorie n°' + (index+1))
-                                                        .replace(/__name__/g, index));
 
-    // On ajoute au prototype un lien pour pouvoir supprimer la catégorie
-    ajouterLienSuppression($prototype);
 
-    // On ajoute le prototype modifié à la fin de la balise <div>
-    $container.append($prototype);
+    var readURL = function(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
 
-    // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
-    index++;
-  }
+            var photoId = input.id.match(/\d+/g);
 
-  // La fonction qui ajoute un lien de suppression d'une catégorie
-  function ajouterLienSuppression($prototype) {
-    // Création du lien
-    $lienSuppression = $('<a href="#" class="btn btn-danger">Supprimer</a>');
+            reader.onload = function(e) {
+                $('#photoAnnonce_' + photoId[0]).attr('src', e.target.result);
+            }
 
-    // Ajout du lien
-    $prototype.append($lienSuppression);
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 
-    // Ajout du listener sur le clic du lien
-    $lienSuppression.click(function(e) {
-      $prototype.remove();
-      e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-      return false;
-    });
-  }
-});
 </script>
 
 {% endblock %}

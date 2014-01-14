@@ -6,12 +6,12 @@
 
 {% block body %}
 <div class="well">
-    
+    <h3>Gérer la catégorie</h3>
     {# Les erreurs générales du formulaire. #}
     {{ form_errors(form) }}
     <form method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
-        <input type="submit" class="btn btn-primary" />
+        <input type="submit" class="btn btn-info" />
     </form>
 </div>
 {% endblock %}

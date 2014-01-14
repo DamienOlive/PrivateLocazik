@@ -6,28 +6,35 @@
 
         {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('css/bootstrap-dialog.css') }}" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('css/main.css') }}" type="text/css" />
         {% endblock %}
 
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
         <div class="container">
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            Connecté en tant que <a href="{{ path('fos_user_profile_show') }}">{{ app.user.username }}</a> - 
+            <a href="{{ path('fos_user_security_logout') }}">Déconnexion</a>
+            {% else %}
+            <a href="{{ path('fos_user_security_login') }}">Connexion</a> | 
+            <a href="{{ path('fos_user_registration_register') }}">S'inscrire</a>
+            {% endif %}
             <div id="header" class="hero-unit">
-                <h1>Mon Projet Symfony2</h1>
-                <p>Ce projet est propulsé par Symfony2, et construit grâce au tutoriel du siteduzero.</p>
-                <p><a class="btn btn-primary btn-large" href="http://www.siteduzero.com/informatique/tutoriels/developpez-votre-site-web-avec-le-framework-symfony2">
-                        Lire le tutoriel »
-                    </a></p>
+                <h1>Locazik</h1>
+                <p>
+                    Ce site permet de louer facilement votre matos !
+                </p>
             </div>
 
             <div class="row">
                 <div id="menu" class="span3">
-                    <h3>Le blog</h3>
-                    <ul class="nav nav-pills nav-stacked">
-                        <li><a href="{{ path('locazik_annonce_creer') }}">Ajouter une catégorie</a></li>
-                        <li><a href="{{ path('locazik_annonce_homepage') }}">Ajouter une annonce</a></li>
-                    </ul>
-
+                    <h3>Principaux Liens</h3>
+                    <a href="{{ path('locazik_annonce_lister') }}">Annonce</a> - 
+                    <a href="{{ path('locazik_categorie_lister') }}">Catégorie</a> - 
+                    <a href="{{ path('locazik_mot_lister') }}">Mot Interdits</a>
+                    <hr>
           {#{ render(controller("SdzBlogBundle:Blog:menu", {'nombre': 3})) }#}
                 </div>
                 <div id="content" class="span9">
@@ -45,8 +52,10 @@
 
     {% block javascripts %}
       {# Ajoutez ces lignes JavaScript si vous comptez vous servir des fonctionnalités du bootstrap Twitter #}
-          <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-          <script type="text/javascript" src="{{ asset('js/bootstrap.js') }}"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="{{ asset('js/bootstrap.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/bootstrap-dialog.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/core.js') }}"></script>
     {% endblock %}
     </body>
 </html>

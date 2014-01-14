@@ -1,11 +1,14 @@
 
-<html>
-    <body>
-        <a href="{{ path('locazik_categorie_modifier', { 'id': categorie.id }) }}">{{ categorie.categorieName }}</a><br />
-        <strong>Description :</strong> <br /> {{ categorie.categorieDesc }}<br />
-        <strong>Catégorie parente : </strong> {{ categorie.categorieParentName }} <br />
-        <strong>Est en ligne : </strong> {{ categorie.isOnline }} <br />
-        Date Creation : {{ categorie.dateCreation|date('d-m-Y') }} <br />
-        <strong>Date mise à jour</strong> {{ categorie.dateUpdate|date('d-m-Y') }}
-    </body>
-</html>
+
+{% extends "::base.html.twig" %}
+
+{% block title %}{{ parent() }} - Détail Catégorie{% endblock %}
+
+{% block body %}
+    Détail : <br />
+    <a href="{{ path('locazik_categorie_modifier', { 'id': categorie.id }) }}">{{ categorie.categorieName }}</a><br />
+    <strong>Description :</strong> <br /> {{ categorie.categorieDesc }}<br />
+    <strong>Est en ligne : </strong> {{ categorie.isOnline }} <br />
+    <strong>Date Creation</strong> : {{ categorie.dateCreation|date('d-m-Y') }} <br />
+    <strong>Date mise à jour</strong> {{ categorie.dateUpdate|date('d-m-Y') }}
+{% endblock %}

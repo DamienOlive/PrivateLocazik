@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="Categorie")
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Locazik\AnnonceBundle\Entity\CategorieRepository")
  */
 class Categorie
 {
@@ -46,10 +47,18 @@ class Categorie
     /**
      * @var integer
      *
-     * @ORM\Column(name="CategorieParentId", type="integer")
+     * @ORM\ManyToOne(targetEntity="Categorie", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    private $categorieParentId;
+    private $parent;
 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Categorie", mappedBy="parent", cascade={"persist", "remove"})
+     */
+    protected $children;
+    
+    
     /**
      * @var boolean
      *
@@ -70,15 +79,12 @@ class Categorie
      * @ORM\Column(name="DateUpdate", type="datetime")
      */
     private $dateUpdate;
-    
-    private $categorieParentName;
 
     public function __construct()
     {
         $this->dateCreation = new \Datetime();
         $this->dateUpdate = new \Datetime();
         $this->isOnline = false;
-        $this->categorieParentId = false;
         $this->annonces = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -137,29 +143,6 @@ class Categorie
     public function getCategorieDesc()
     {
         return $this->categorieDesc;
-    }
-
-    /**
-     * Set categorieParentId
-     *
-     * @param integer $categorieParentId
-     * @return Categorie
-     */
-    public function setCategorieParentId($categorieParentId)
-    {
-        $this->categorieParentId = $categorieParentId;
-
-        return $this;
-    }
-
-    /**
-     * Get categorieParentId
-     *
-     * @return integer 
-     */
-    public function getCategorieParentId()
-    {
-        return $this->categorieParentId;
     }
 
     /**
@@ -222,28 +205,6 @@ class Categorie
     }
 
     /**
-     * Get CategorieParentName
-     *
-     * @return string 
-     */
-    public function getCategorieParentName()
-    {
-        return $this->categorieParentName;
-    }
-    
-    /**
-     * Set CategorieParentName
-     *
-     * @param string $categorieParentName
-     * @return Categorie
-     */
-    public function setCategorieParentName($categorieParentName)
-    {
-        $this->categorieParentName = $categorieParentName;
-        return $this;
-    }
-
-    /**
      * Get isOnline
      *
      * @return boolean 
@@ -271,5 +232,74 @@ class Categorie
     public function getAnnonces()
     {
         return $this->annonces;
+    }
+
+    /**
+     * Add annonces
+     *
+     * @param \Locazik\AnnonceBundle\Entity\Annonce $annonces
+     * @return Categorie
+     */
+    public function addAnnonce(\Locazik\AnnonceBundle\Entity\Annonce $annonces)
+    {
+        $this->annonces[] = $annonces;
+
+        return $this;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Locazik\AnnonceBundle\Entity\Categorie $parent
+     * @return Categorie
+     */
+    public function setParent(\Locazik\AnnonceBundle\Entity\Categorie $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Locazik\AnnonceBundle\Entity\Categorie 
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Add children
+     *
+     * @param \Locazik\AnnonceBundle\Entity\Categorie $children
+     * @return Categorie
+     */
+    public function addChild(\Locazik\AnnonceBundle\Entity\Categorie $children)
+    {
+        $this->children[] = $children;
+
+        return $this;
+    }
+
+    /**
+     * Remove children
+     *
+     * @param \Locazik\AnnonceBundle\Entity\Categorie $children
+     */
+    public function removeChild(\Locazik\AnnonceBundle\Entity\Categorie $children)
+    {
+        $this->children->removeElement($children);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
 }

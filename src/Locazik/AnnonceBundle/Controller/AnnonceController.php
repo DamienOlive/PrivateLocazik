@@ -28,24 +28,34 @@ class AnnonceController extends Controller
             $form->bind($request);
             if($form->isValid())
             {
-                $imageAnnonces = $annonce->getImageAnnonces();
-                
+                $imageAnnonces = $annonce->getImageAnnonces();                
                 // possibilité d'upload plusieurs fichiers
-                foreach($imageAnnonces as $imageAnnonce)
+                if($imageAnnonces != null)
                 {
-                    $imageAnnonce->setAnnonce($annonce);
-                    $imageAnnonce->upload();
+                   foreach($imageAnnonces as $imageAnnonce)
+                   {
+                       var_dump($imageAnnonce->getFile());
+                       if($imageAnnonce->getFile() != null)
+                       {
+                           $imageAnnonce->setAnnonce($annonce);
+                           $imageAnnonce->upload();
+                       }
+                   }   
                 }
                 
+                
+                /*
+                gerer controle insertion image ici malgré le controle plus haut
+                supprimer image quand pas d upload
+                */
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($annonce);
                 $entityManager->flush();
-                return $this->render('LocazikAnnonceBundle:Annonce:confirmationCreation.html.twig');
+                return $this->redirect($this->generateUrl('locazik_annonce_confirmer'));
             }
         }
         
         return $this->render('LocazikAnnonceBundle:Annonce:creer.html.twig', array('form' => $form->createView()));
-        
     }
     
     
@@ -70,11 +80,30 @@ class AnnonceController extends Controller
                 $entityManager->persist($annonce);
                 //$entityManager->persist($image);
                 $entityManager->flush();
-                return $this->render('LocazikAnnonceBundle:Annonce:listeAnnonces.html.twig');
+                return $this->redirect($this->generateUrl('locazik_annonce_lister'));
             }
         }
         
         return $this->render('LocazikAnnonceBundle:Annonce:validation.html.twig', array('form' => $form->createView()));
+    }
+    
+    public function listerAnnonceAction()
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $annonceRepository = $entityManager->getRepository('LocazikAnnonceBundle:Annonce');
+        $listeAnnonces = $annonceRepository->findAll();
+        
+        return $this->render('LocazikAnnonceBundle:Annonce:lister.html.twig', array('listeAnnonces' => $listeAnnonces));
+    }
+    
+    public function detailAnnonceAction($id)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $annonceRepository = $entityManager->getRepository('LocazikAnnonceBundle:Annonce');
+        $annonce = $annonceRepository->find($id);
+        
+        //var_dump(count($annonce->getImageAnnonces()));
+        return $this->render('LocazikAnnonceBundle:Annonce:detail.html.twig', array('annonce' => $annonce));
     }
     
     public function supprimerAnnonceAction($id)
@@ -87,6 +116,11 @@ class AnnonceController extends Controller
         $entityManager->flush();
         
         return $this->render('LocazikAnnonceBundle:Annonce:listeAnnonces.html.twig');
+    }
+    
+    public function confirmerCreationAnnonceAction()
+    {
+        return $this->render('LocazikAnnonceBundle:Annonce:confirmerCreation.html.twig');
     }
     
 }

@@ -135,14 +135,19 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
+        // locazik_user_homepage
+        if (0 === strpos($pathinfo, '/hello') && preg_match('#^/hello/(?P<name>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_user_homepage')), array (  '_controller' => 'Locazik\\UserBundle\\Controller\\DefaultController::indexAction',));
+        }
+
         if (0 === strpos($pathinfo, '/categorie')) {
-            // locazik_annonce_homepage
-            if (rtrim($pathinfo, '/') === '/categorie') {
+            // locazik_categorie_lister
+            if (rtrim($pathinfo, '/') === '/categorie/lister') {
                 if (substr($pathinfo, -1) !== '/') {
-                    return $this->redirect($pathinfo.'/', 'locazik_annonce_homepage');
+                    return $this->redirect($pathinfo.'/', 'locazik_categorie_lister');
                 }
 
-                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\CategorieController::indexAction',  '_route' => 'locazik_annonce_homepage',);
+                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\CategorieController::listerCategorieAction',  '_route' => 'locazik_categorie_lister',);
             }
 
             // locazik_categorie_ajouter
@@ -170,6 +175,15 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                 }
 
                 return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_categorie_modifier')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\CategorieController::gererCategorieAction',));
+            }
+
+            // locazik_categorie_supprimer
+            if (rtrim($pathinfo, '/') === '/categorie/supprimer') {
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'locazik_categorie_supprimer');
+                }
+
+                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\CategorieController::ajaxSupprimerCategorieAction',  '_route' => 'locazik_categorie_supprimer',);
             }
 
         }
@@ -202,6 +216,33 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                 return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_annonce_supprimer')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::supprimerAnnonceAction',));
             }
 
+            // locazik_annonce_confirmer
+            if (rtrim($pathinfo, '/') === '/annonce/confirmer') {
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'locazik_annonce_confirmer');
+                }
+
+                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::confirmerCreationAnnonceAction',  '_route' => 'locazik_annonce_confirmer',);
+            }
+
+            // locazik_annonce_lister
+            if (rtrim($pathinfo, '/') === '/annonce/lister') {
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'locazik_annonce_lister');
+                }
+
+                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::listerAnnonceAction',  '_route' => 'locazik_annonce_lister',);
+            }
+
+            // locazik_annonce_detail
+            if (0 === strpos($pathinfo, '/annonce/detail') && preg_match('#^/annonce/detail/(?P<id>[^/]++)/?$#s', $pathinfo, $matches)) {
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'locazik_annonce_detail');
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_annonce_detail')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::detailAnnonceAction',));
+            }
+
         }
 
         if (0 === strpos($pathinfo, '/mot-interdit')) {
@@ -224,15 +265,177 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             }
 
             // locazik_mot_supprimer
-            if (0 === strpos($pathinfo, '/mot-interdit/supprimer') && preg_match('#^/mot\\-interdit/supprimer/(?P<id>[^/]++)/?$#s', $pathinfo, $matches)) {
+            if (rtrim($pathinfo, '/') === '/mot-interdit/supprimer') {
                 if (substr($pathinfo, -1) !== '/') {
                     return $this->redirect($pathinfo.'/', 'locazik_mot_supprimer');
                 }
 
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_mot_supprimer')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\MotInterditController::supprimerMotAction',));
+                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\MotInterditController::ajaxSupprimerMotAction',  '_route' => 'locazik_mot_supprimer',);
             }
 
         }
+
+        if (0 === strpos($pathinfo, '/log')) {
+            if (0 === strpos($pathinfo, '/login')) {
+                // fos_user_security_login
+                if ($pathinfo === '/login') {
+                    return array (  '_controller' => 'FOS\\UserBundle\\Controller\\SecurityController::loginAction',  '_route' => 'fos_user_security_login',);
+                }
+
+                // fos_user_security_check
+                if ($pathinfo === '/login_check') {
+                    if ($this->context->getMethod() != 'POST') {
+                        $allow[] = 'POST';
+                        goto not_fos_user_security_check;
+                    }
+
+                    return array (  '_controller' => 'FOS\\UserBundle\\Controller\\SecurityController::checkAction',  '_route' => 'fos_user_security_check',);
+                }
+                not_fos_user_security_check:
+
+            }
+
+            // fos_user_security_logout
+            if ($pathinfo === '/logout') {
+                return array (  '_controller' => 'FOS\\UserBundle\\Controller\\SecurityController::logoutAction',  '_route' => 'fos_user_security_logout',);
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/profile')) {
+            // fos_user_profile_show
+            if (rtrim($pathinfo, '/') === '/profile') {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_fos_user_profile_show;
+                }
+
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'fos_user_profile_show');
+                }
+
+                return array (  '_controller' => 'FOS\\UserBundle\\Controller\\ProfileController::showAction',  '_route' => 'fos_user_profile_show',);
+            }
+            not_fos_user_profile_show:
+
+            // fos_user_profile_edit
+            if ($pathinfo === '/profile/edit') {
+                return array (  '_controller' => 'FOS\\UserBundle\\Controller\\ProfileController::editAction',  '_route' => 'fos_user_profile_edit',);
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/re')) {
+            if (0 === strpos($pathinfo, '/register')) {
+                // fos_user_registration_register
+                if (rtrim($pathinfo, '/') === '/register') {
+                    if (substr($pathinfo, -1) !== '/') {
+                        return $this->redirect($pathinfo.'/', 'fos_user_registration_register');
+                    }
+
+                    return array (  '_controller' => 'FOS\\UserBundle\\Controller\\RegistrationController::registerAction',  '_route' => 'fos_user_registration_register',);
+                }
+
+                if (0 === strpos($pathinfo, '/register/c')) {
+                    // fos_user_registration_check_email
+                    if ($pathinfo === '/register/check-email') {
+                        if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                            $allow = array_merge($allow, array('GET', 'HEAD'));
+                            goto not_fos_user_registration_check_email;
+                        }
+
+                        return array (  '_controller' => 'FOS\\UserBundle\\Controller\\RegistrationController::checkEmailAction',  '_route' => 'fos_user_registration_check_email',);
+                    }
+                    not_fos_user_registration_check_email:
+
+                    if (0 === strpos($pathinfo, '/register/confirm')) {
+                        // fos_user_registration_confirm
+                        if (preg_match('#^/register/confirm/(?P<token>[^/]++)$#s', $pathinfo, $matches)) {
+                            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                                $allow = array_merge($allow, array('GET', 'HEAD'));
+                                goto not_fos_user_registration_confirm;
+                            }
+
+                            return $this->mergeDefaults(array_replace($matches, array('_route' => 'fos_user_registration_confirm')), array (  '_controller' => 'FOS\\UserBundle\\Controller\\RegistrationController::confirmAction',));
+                        }
+                        not_fos_user_registration_confirm:
+
+                        // fos_user_registration_confirmed
+                        if ($pathinfo === '/register/confirmed') {
+                            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                                $allow = array_merge($allow, array('GET', 'HEAD'));
+                                goto not_fos_user_registration_confirmed;
+                            }
+
+                            return array (  '_controller' => 'FOS\\UserBundle\\Controller\\RegistrationController::confirmedAction',  '_route' => 'fos_user_registration_confirmed',);
+                        }
+                        not_fos_user_registration_confirmed:
+
+                    }
+
+                }
+
+            }
+
+            if (0 === strpos($pathinfo, '/resetting')) {
+                // fos_user_resetting_request
+                if ($pathinfo === '/resetting/request') {
+                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                        $allow = array_merge($allow, array('GET', 'HEAD'));
+                        goto not_fos_user_resetting_request;
+                    }
+
+                    return array (  '_controller' => 'FOS\\UserBundle\\Controller\\ResettingController::requestAction',  '_route' => 'fos_user_resetting_request',);
+                }
+                not_fos_user_resetting_request:
+
+                // fos_user_resetting_send_email
+                if ($pathinfo === '/resetting/send-email') {
+                    if ($this->context->getMethod() != 'POST') {
+                        $allow[] = 'POST';
+                        goto not_fos_user_resetting_send_email;
+                    }
+
+                    return array (  '_controller' => 'FOS\\UserBundle\\Controller\\ResettingController::sendEmailAction',  '_route' => 'fos_user_resetting_send_email',);
+                }
+                not_fos_user_resetting_send_email:
+
+                // fos_user_resetting_check_email
+                if ($pathinfo === '/resetting/check-email') {
+                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                        $allow = array_merge($allow, array('GET', 'HEAD'));
+                        goto not_fos_user_resetting_check_email;
+                    }
+
+                    return array (  '_controller' => 'FOS\\UserBundle\\Controller\\ResettingController::checkEmailAction',  '_route' => 'fos_user_resetting_check_email',);
+                }
+                not_fos_user_resetting_check_email:
+
+                // fos_user_resetting_reset
+                if (0 === strpos($pathinfo, '/resetting/reset') && preg_match('#^/resetting/reset/(?P<token>[^/]++)$#s', $pathinfo, $matches)) {
+                    if (!in_array($this->context->getMethod(), array('GET', 'POST', 'HEAD'))) {
+                        $allow = array_merge($allow, array('GET', 'POST', 'HEAD'));
+                        goto not_fos_user_resetting_reset;
+                    }
+
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'fos_user_resetting_reset')), array (  '_controller' => 'FOS\\UserBundle\\Controller\\ResettingController::resetAction',));
+                }
+                not_fos_user_resetting_reset:
+
+            }
+
+        }
+
+        // fos_user_change_password
+        if ($pathinfo === '/profile/change-password') {
+            if (!in_array($this->context->getMethod(), array('GET', 'POST', 'HEAD'))) {
+                $allow = array_merge($allow, array('GET', 'POST', 'HEAD'));
+                goto not_fos_user_change_password;
+            }
+
+            return array (  '_controller' => 'FOS\\UserBundle\\Controller\\ChangePasswordController::changePasswordAction',  '_route' => 'fos_user_change_password',);
+        }
+        not_fos_user_change_password:
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
