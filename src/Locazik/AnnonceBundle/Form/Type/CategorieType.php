@@ -1,6 +1,6 @@
 <?php
 
-namespace Locazik\AnnonceBundle\Form;
+namespace Locazik\AnnonceBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

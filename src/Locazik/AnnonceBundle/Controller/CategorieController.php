@@ -4,7 +4,7 @@ namespace Locazik\AnnonceBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Locazik\AnnonceBundle\Entity\Categorie;
-use Locazik\AnnonceBundle\Form\CategorieType;
+use Locazik\AnnonceBundle\Form\Type\CategorieType;
 use Symfony\Component\HttpFoundation\Response;
 
 class CategorieController extends Controller
@@ -27,7 +27,7 @@ class CategorieController extends Controller
     {
         $isAjax = $this->get('request')->isXMLHttpRequest();
         $id = $this->get('request')->request->get('id');
-        if($isAjax && $id != null)
+        if($isAjax)
         {
             if($id != null)
             {

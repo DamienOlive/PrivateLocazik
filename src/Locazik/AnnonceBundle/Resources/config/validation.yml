@@ -1,0 +1,6 @@
+# src/Locazik/AnnonceBundle/Resources/config/validation.yml
+Locazik\AnnonceBundle\Entity\ImageAnnonce:
+    properties:
+        file:
+            - File:
+                maxSize: 1000000

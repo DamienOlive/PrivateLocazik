@@ -1,3 +1,8 @@
+locazik_homepage:
+    pattern:  /
+    defaults: { _controller: LocazikAnnonceBundle:Default:index }
+
+
 locazik_categorie_lister:
     pattern:  /categorie/lister/
     defaults: { _controller: LocazikAnnonceBundle:Categorie:listerCategorie }
@@ -44,6 +49,10 @@ locazik_annonce_detail:
     pattern:  /annonce/detail/{id}/
     defaults: { _controller: LocazikAnnonceBundle:Annonce:detailAnnonce }
     
+locazik_annonce_listerRegion:
+    pattern:  /annonces/{id}/{nom}/
+    defaults: { _controller: LocazikAnnonceBundle:Annonce:listerAnnonceParRegion }
+    
     
     
 locazik_mot_creer:
@@ -57,3 +66,10 @@ locazik_mot_lister:
 locazik_mot_supprimer:
     pattern:  /mot-interdit/supprimer/
     defaults: { _controller: LocazikAnnonceBundle:MotInterdit:ajaxSupprimerMot } 
+    
+    
+    
+
+locazik_geo_listedepfromregion:
+    pattern:  /geo/listedepfromregion/
+    defaults: { _controller: LocazikAnnonceBundle:Geo:ajaxListeDepFromRegion }  

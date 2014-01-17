@@ -1,0 +1,17 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}{{ parent() }} - Détail Annonce{% endblock %}
+
+{% block body %}
+        <div id="canvas_france">
+        </div>
+        
+        {{ render(controller("LocazikAnnonceBundle:Geo:listerRegionHomePage")) }}
+        
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/raphael-min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/mapping.js') }}"></script>
+{% endblock %}

@@ -1,5 +1,55 @@
 
+#canvas_france{
+    width: 600px;
+    float: left;
+}
+
 .photoAnnonce{
     width: 300px;
     float: left;
+}
+
+.dateListeAnnonce{
+    color: #000000;
+    float: left;
+    font-weight: normal;
+    padding: 20px 20px 0 0;
+    text-align: right;
+    width: 90px;
+}
+
+.photoListeAnnonce{
+    float: left;
+    padding: 20px 0;
+    width: 200px;
+}
+
+.detailListeAnnonce{
+    float: left;
+    overflow: hidden;
+    padding: 20px 0;
+    width: 420px;
+}
+
+.detailListeAnnonce .detail{
+    font-size: 14px;
+    color: black;
+}
+
+.detailListeAnnonce .title{
+    color: #39B3D7;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.detailListeAnnonce .price{
+    color: #39B3D7;
+    float: left;
+    font-size: 14px;
+    height: 32px;
+    line-height: 32px;
+}
+    
+.clear{
+    clear: both;
 }

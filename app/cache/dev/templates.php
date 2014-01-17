@@ -85,6 +85,8 @@
   'LocazikAnnonceBundle:Categorie:detail.html.twig' => 'C:\\wamp\\www\\locazik\\src\\Locazik\\AnnonceBundle/Resources/views/Categorie/detail.html.twig',
   'LocazikAnnonceBundle:Categorie:gerer.html.twig' => 'C:\\wamp\\www\\locazik\\src\\Locazik\\AnnonceBundle/Resources/views/Categorie/gerer.html.twig',
   'LocazikAnnonceBundle:Categorie:lister.html.twig' => 'C:\\wamp\\www\\locazik\\src\\Locazik\\AnnonceBundle/Resources/views/Categorie/lister.html.twig',
+  'LocazikAnnonceBundle:Geo:listeRegionHomePage.html.twig' => 'C:\\wamp\\www\\locazik\\src\\Locazik\\AnnonceBundle/Resources/views/Geo/listeRegionHomePage.html.twig',
+  'LocazikAnnonceBundle::home.html.twig' => 'C:\\wamp\\www\\locazik\\src\\Locazik\\AnnonceBundle/Resources/views/home.html.twig',
   'LocazikAnnonceBundle:MotInterdit:creer.html.twig' => 'C:\\wamp\\www\\locazik\\src\\Locazik\\AnnonceBundle/Resources/views/MotInterdit/creer.html.twig',
   'LocazikAnnonceBundle:MotInterdit:lister.html.twig' => 'C:\\wamp\\www\\locazik\\src\\Locazik\\AnnonceBundle/Resources/views/MotInterdit/lister.html.twig',
   'LocazikAnnonceBundle:MotInterdit:supprimer.html.twig' => 'C:\\wamp\\www\\locazik\\src\\Locazik\\AnnonceBundle/Resources/views/MotInterdit/supprimer.html.twig',

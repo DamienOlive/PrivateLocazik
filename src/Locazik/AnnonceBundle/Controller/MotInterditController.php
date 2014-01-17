@@ -4,7 +4,7 @@ namespace Locazik\AnnonceBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Locazik\AnnonceBundle\Entity\MotInterdit;
-use Locazik\AnnonceBundle\Form\MotInterditType;
+use Locazik\AnnonceBundle\Form\Type\MotInterditType;
 use Symfony\Component\HttpFoundation\Response;
 
 class MotInterditController extends Controller

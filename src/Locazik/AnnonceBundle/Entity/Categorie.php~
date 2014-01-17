@@ -3,281 +3,68 @@
 namespace Locazik\AnnonceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Categorie
  *
- * @ORM\Table(name="Categorie")
+ * @ORM\Table(name="categorie", indexes={@ORM\Index(name="IDX_CB8C5497727ACA70", columns={"parent_id"})})
  * @ORM\Entity
  */
 class Categorie
 {
     /**
-     * @ORM\OneToMany(targetEntity="Locazik\AnnonceBundle\Entity\Annonce", mappedBy="categorie")
-    */
-    private $annonces;
-    
-    /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="CategorieName", type="string", length=80)
-     * @Assert\Length(min=5, minMessage="Le titre doit faire au moins {{ limit }} caractères.")
+     * @ORM\Column(name="CategorieName", type="string", length=80, nullable=false)
      */
-    private $categorieName;
+    private $categoriename;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="CategorieDesc", type="text")
-     * @Assert\Length(min=20, minMessage="La description doit faire au moins {{ limit }} caractères.")
+     * @ORM\Column(name="CategorieDesc", type="text", nullable=false)
      */
-    private $categorieDesc;
+    private $categoriedesc;
 
-    /**
-     * @var integer
-     *
-     * @ORM\ManyToOne(targetEntity="Categorie", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
-    */
-    private $parent;
-
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Categorie", mappedBy="parent")
-    */
-    protected $children;
-    
-    
     /**
      * @var boolean
      *
-     * @ORM\Column(name="IsOnline", type="boolean")
+     * @ORM\Column(name="IsOnline", type="boolean", nullable=false)
      */
-    private $isOnline;
+    private $isonline;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="DateCreation", type="datetime")
+     * @ORM\Column(name="DateCreation", type="datetime", nullable=false)
      */
-    private $dateCreation;
+    private $datecreation;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="DateUpdate", type="datetime")
+     * @ORM\Column(name="DateUpdate", type="datetime", nullable=false)
      */
-    private $dateUpdate;
-    
-    private $categorieParentName;
-
-    public function __construct()
-    {
-        $this->dateCreation = new \Datetime();
-        $this->dateUpdate = new \Datetime();
-        $this->isOnline = false;
-        $this->categorieParentId = false;
-        $this->annonces = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
+    private $dateupdate;
 
     /**
-     * Get id
+     * @var \Categorie
      *
-     * @return integer 
+     * @ORM\ManyToOne(targetEntity="Categorie")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * })
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $parent;
 
-    /**
-     * Set categorieName
-     *
-     * @param string $categorieName
-     * @return Categorie
-     */
-    public function setCategorieName($categorieName)
-    {
-        $this->categorieName = $categorieName;
 
-        return $this;
-    }
-
-    /**
-     * Get categorieName
-     *
-     * @return string 
-     */
-    public function getCategorieName()
-    {
-        return $this->categorieName;
-    }
-
-    /**
-     * Set categorieDesc
-     *
-     * @param text $categorieDesc
-     * @return Categorie
-     */
-    public function setCategorieDesc($categorieDesc)
-    {
-        $this->categorieDesc = $categorieDesc;
-
-        return $this;
-    }
-
-    /**
-     * Get categorieDesc
-     *
-     * @return text 
-     */
-    public function getCategorieDesc()
-    {
-        return $this->categorieDesc;
-    }
-
-    /**
-     * Set categorieParentId
-     *
-     * @param integer $categorieParentId
-     * @return Categorie
-     */
-    public function setCategorieParentId($categorieParentId)
-    {
-        $this->categorieParentId = $categorieParentId;
-
-        return $this;
-    }
-
-    /**
-     * Get categorieParentId
-     *
-     * @return integer 
-     */
-    public function getCategorieParentId()
-    {
-        return $this->categorieParentId;
-    }
-
-    /**
-     * Set dateCreation
-     *
-     * @param \DateTime $dateCreation
-     * @return Categorie
-     */
-    public function setDateCreation($dateCreation)
-    {
-        $this->dateCreation = $dateCreation;
-
-        return $this;
-    }
-
-    /**
-     * Get dateCreation
-     *
-     * @return \DateTime 
-     */
-    public function getDateCreation()
-    {
-        return $this->dateCreation;
-    }
-
-    /**
-     * Set dateUpdate
-     *
-     * @param \DateTime $dateUpdate
-     * @return Categorie
-     */
-    public function setDateUpdate($dateUpdate)
-    {
-        $this->dateUpdate = $dateUpdate;
-
-        return $this;
-    }
-
-    /**
-     * Get dateUpdate
-     *
-     * @return \DateTime 
-     */
-    public function getDateUpdate()
-    {
-        return $this->dateUpdate;
-    }
-
-    /**
-     * Set isOnline
-     *
-     * @param boolean $isOnline
-     * @return Categorie
-     */
-    public function setIsOnline($isOnline)
-    {
-        $this->isOnline = $isOnline;
-
-        return $this;
-    }
-
-    /**
-     * Get CategorieParentName
-     *
-     * @return string 
-     */
-    public function getCategorieParentName()
-    {
-        return $this->categorieParentName;
-    }
-    
-    /**
-     * Set CategorieParentName
-     *
-     * @param string $categorieParentName
-     * @return Categorie
-     */
-    public function setCategorieParentName($categorieParentName)
-    {
-        $this->categorieParentName = $categorieParentName;
-        return $this;
-    }
-
-    /**
-     * Get isOnline
-     *
-     * @return boolean 
-     */
-    public function getIsOnline()
-    {
-        return $this->isOnline;
-    }
-
-    /**
-     * Remove annonce
-     *
-     * @param \Locazik\AnnonceBundle\Entity\Annonce $annonce
-     */
-    public function removeAnnonce(\Locazik\AnnonceBundle\Entity\Annonce $annonce)
-    {
-        $this->annonces->removeElement($annonce);
-    }
-
-    /**
-     * Get annonces
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getAnnonces()
-    {
-        return $this->annonces;
-    }
 }

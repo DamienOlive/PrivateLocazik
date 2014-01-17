@@ -1,0 +1,60 @@
+<?php
+
+namespace Locazik\AnnonceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Ville
+ *
+ * @ORM\Table(name="ville")
+ * @ORM\Entity
+ */
+class Ville
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="departement_id", type="integer", nullable=false)
+     */
+    private $departementId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nom", type="string", length=250, nullable=false)
+     */
+    private $nom;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cp", type="string", length=6, nullable=false)
+     */
+    private $cp;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lat", type="string", length=12, nullable=false)
+     */
+    private $lat;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lon", type="string", length=12, nullable=false)
+     */
+    private $lon;
+
+
+}

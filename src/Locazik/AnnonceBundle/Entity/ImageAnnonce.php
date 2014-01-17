@@ -127,7 +127,7 @@ class ImageAnnonce
      * @param File $file
      * @return ImageAnnonce
      */
-    public function setFile($file)
+    public function setFile(\Symfony\Component\HttpFoundation\File\UploadedFile $file)
     {
         $this->file = $file;
 

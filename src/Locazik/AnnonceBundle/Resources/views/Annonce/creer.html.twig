@@ -110,7 +110,22 @@
         }
     });
 
-
+    var listeDepFromRegion = function(idRegion) {
+        $.post("{{ path('locazik_geo_listedepfromregion') }}", {idRegion: idRegion}, function(data) {
+            if (data['result'] == 'success') {
+                $('#locazik_annoncebundle_annonce_departement').html('');
+                $.each(data['data'], function(key, value) {
+                    $('#locazik_annoncebundle_annonce_departement').append(new Option( value.departement, value.id, true, true));
+                });
+            } else {
+                alertBox(BootstrapDialog.TYPE_DANGER, 
+                    'Erreur de chargement', 
+                    'Il y a eu une erreur de chargement. <br />Veuillez réessayer.<br /> \n\
+                    Si le problème perdure, merci de contacter un administrateur.'
+                );
+            }
+        });
+    }
 
     var readURL = function(input) {
         if (input.files && input.files[0]) {

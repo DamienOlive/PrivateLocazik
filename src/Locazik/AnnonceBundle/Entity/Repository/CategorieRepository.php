@@ -1,7 +1,7 @@
 <?php
 // src/Locazik/AnnonceBundle/Entity/Repository
 
-namespace Locazik\AnnonceBundle\Entity;
+namespace Locazik\AnnonceBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;

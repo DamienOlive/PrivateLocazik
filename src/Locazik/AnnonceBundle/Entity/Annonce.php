@@ -23,6 +23,17 @@ class Annonce
     */
     private $categorie;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="Locazik\AnnonceBundle\Entity\Region", inversedBy="annonces")
+     * @ORM\JoinColumn(nullable=false)
+    */
+    private $region;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Locazik\AnnonceBundle\Entity\Departement", inversedBy="annonces")
+     * @ORM\JoinColumn(nullable=false)
+    */
+    private $departement;
     
     /**
      * @var integer
@@ -316,5 +327,51 @@ class Annonce
     public function getCategorie()
     {
         return $this->categorie;
+    }
+
+    /**
+     * Set region
+     *
+     * @param \Locazik\AnnonceBundle\Entity\Region $region
+     * @return Annonce
+     */
+    public function setRegion(\Locazik\AnnonceBundle\Entity\Region $region)
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    /**
+     * Get region
+     *
+     * @return \Locazik\AnnonceBundle\Entity\Region 
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
+
+    /**
+     * Set departement
+     *
+     * @param \Locazik\AnnonceBundle\Entity\Departement $departement
+     * @return Annonce
+     */
+    public function setDepartement(\Locazik\AnnonceBundle\Entity\Departement $departement)
+    {
+        $this->departement = $departement;
+
+        return $this;
+    }
+
+    /**
+     * Get departement
+     *
+     * @return \Locazik\AnnonceBundle\Entity\Departement 
+     */
+    public function getDepartement()
+    {
+        return $this->departement;
     }
 }

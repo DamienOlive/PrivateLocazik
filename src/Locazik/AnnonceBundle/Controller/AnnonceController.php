@@ -6,8 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Locazik\AnnonceBundle\Entity\Categorie;
 use Locazik\AnnonceBundle\Entity\Annonce;
 use Locazik\AnnonceBundle\Entity\ImageAnnonce;
-use Locazik\AnnonceBundle\Form\AnnonceType;
-use Locazik\AnnonceBundle\Form\AnnonceValidationType;
+use Locazik\AnnonceBundle\Form\Type\AnnonceType;
+use Locazik\AnnonceBundle\Form\Type\AnnonceValidationType;
 
 class AnnonceController extends Controller
 {
@@ -19,7 +19,9 @@ class AnnonceController extends Controller
     public function creerAnnonceAction()
     {
         $annonce = new Annonce();
-        $form = $this->createForm(new AnnonceType(), $annonce);
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        $form = $this->createForm(new AnnonceType($entityManager), $annonce);
         
         $request = $this->get('request');
         
@@ -48,7 +50,6 @@ class AnnonceController extends Controller
                 gerer controle insertion image ici malgré le controle plus haut
                 supprimer image quand pas d upload
                 */
-                $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($annonce);
                 $entityManager->flush();
                 return $this->redirect($this->generateUrl('locazik_annonce_confirmer'));
@@ -56,6 +57,16 @@ class AnnonceController extends Controller
         }
         
         return $this->render('LocazikAnnonceBundle:Annonce:creer.html.twig', array('form' => $form->createView()));
+    }
+    
+    public function listerAnnonceParRegionAction($id, $nom)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $region = $entityManager->getRepository('LocazikAnnonceBundle:Region')->find($id);
+        $listeAnnonces = $region->getAnnonces();
+        
+        return $this->render('LocazikAnnonceBundle:Annonce:lister.html.twig', 
+                array('region' => $region, 'listeAnnonces' => $listeAnnonces));
     }
     
     

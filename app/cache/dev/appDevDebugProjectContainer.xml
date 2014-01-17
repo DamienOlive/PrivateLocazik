@@ -170,7 +170,9 @@
       <parameter>C:\wamp\www\locazik\vendor\friendsofsymfony\user-bundle\FOS\UserBundle\Resources\config\validation.xml</parameter>
       <parameter>C:\wamp\www\locazik\vendor\friendsofsymfony\user-bundle\FOS\UserBundle\Resources\config\validation\orm.xml</parameter>
     </parameter>
-    <parameter key="validator.mapping.loader.yaml_files_loader.mapping_files" type="collection"/>
+    <parameter key="validator.mapping.loader.yaml_files_loader.mapping_files" type="collection">
+      <parameter>C:\wamp\www\locazik\src\Locazik\AnnonceBundle\Resources\config\validation.yml</parameter>
+    </parameter>
     <parameter key="validator.expression.class">Symfony\Component\Validator\Constraints\ExpressionValidator</parameter>
     <parameter key="validator.translation_domain">validators</parameter>
     <parameter key="fragment.listener.class">Symfony\Component\HttpKernel\EventListener\FragmentListener</parameter>
@@ -2568,7 +2570,9 @@
             </argument>
             <argument type="service">
               <service class="Symfony\Component\Validator\Mapping\Loader\YamlFilesLoader" public="false">
-                <argument type="collection"/>
+                <argument type="collection">
+                  <argument>C:\wamp\www\locazik\src\Locazik\AnnonceBundle\Resources\config\validation.yml</argument>
+                </argument>
               </service>
             </argument>
           </argument>
@@ -2827,7 +2831,7 @@
         </argument>
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>52d524911916d</argument>
+            <argument>52d8ff011840e</argument>
           </service>
         </argument>
       </argument>
@@ -3160,7 +3164,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.context"/>
-            <argument>52d524911916d</argument>
+            <argument>52d8ff011840e</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
           </service>
         </argument>

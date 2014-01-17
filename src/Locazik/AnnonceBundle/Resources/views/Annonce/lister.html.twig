@@ -3,11 +3,32 @@
 {% block title %}{{ parent() }} Liste annonces{% endblock %}
 
 {% block body %}
-<h2>Liste des annonces</h2>
 
+    {{ region.nomRegion }}<br />
+    Nombre d'annonces {{ listeAnnonces.count }}
+    <ul class="list-group">
     {% for annonce in listeAnnonces %}
-        <li><a href="{{ path('locazik_annonce_detail', { 'id': annonce.id }) }}">{{ annonce.annonceName|e }}</a></li>
+        <a href="{{ path('locazik_annonce_detail', { 'id': annonce.id }) }}">
+            <li class="list-group-item">
+                <div class="dateListeAnnonce">{{ annonce.dateCreation|date('d-m-Y') }}</div>
+                <div class="photoListeAnnonce">
+                    {% for image in annonce.getImageAnnonces()|slice(0,1) %}
+                        <img src="{{ asset(image.getUploadDir()~image.getImageName()) }}" width="159" /><br />
+                        <small>{{ annonce.getImageAnnonces().count }} photo(s)</small>
+                    {% endfor %}
+                </div>
+                <div class="detailListeAnnonce">
+                    <div class="title">{{ annonce.annonceName|e }}</div>
+                    <div class="category">{{ annonce.categorie.getCategorieName() }}</div>
+                    <div class="placement"> Salses-le-Château / Pyrénées-Orientales </div>
+                    <div class="price">{{ annonce.annoncePrix}}€/jour</div>
+                    <p></p>
+                </div>
+                <div class="clear"></div>
+            </li>
+        </a>
     {% endfor %}
+    </ul>
     
     <a href="{{path('locazik_annonce_creer') }}">Ajouter des annonces</a>
 

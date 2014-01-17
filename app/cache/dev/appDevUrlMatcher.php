@@ -140,6 +140,15 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_user_homepage')), array (  '_controller' => 'Locazik\\UserBundle\\Controller\\DefaultController::indexAction',));
         }
 
+        // locazik_homepage
+        if (rtrim($pathinfo, '/') === '') {
+            if (substr($pathinfo, -1) !== '/') {
+                return $this->redirect($pathinfo.'/', 'locazik_homepage');
+            }
+
+            return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\DefaultController::indexAction',  '_route' => 'locazik_homepage',);
+        }
+
         if (0 === strpos($pathinfo, '/categorie')) {
             // locazik_categorie_lister
             if (rtrim($pathinfo, '/') === '/categorie/lister') {
@@ -243,6 +252,15 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                 return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_annonce_detail')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::detailAnnonceAction',));
             }
 
+            // locazik_annonce_listerRegion
+            if (0 === strpos($pathinfo, '/annonces') && preg_match('#^/annonces/(?P<id>[^/]++)/(?P<nom>[^/]++)/?$#s', $pathinfo, $matches)) {
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'locazik_annonce_listerRegion');
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_annonce_listerRegion')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::listerAnnonceParRegionAction',));
+            }
+
         }
 
         if (0 === strpos($pathinfo, '/mot-interdit')) {
@@ -273,6 +291,15 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                 return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\MotInterditController::ajaxSupprimerMotAction',  '_route' => 'locazik_mot_supprimer',);
             }
 
+        }
+
+        // locazik_geo_listedepfromregion
+        if (rtrim($pathinfo, '/') === '/geo/listedepfromregion') {
+            if (substr($pathinfo, -1) !== '/') {
+                return $this->redirect($pathinfo.'/', 'locazik_geo_listedepfromregion');
+            }
+
+            return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\GeoController::ajaxListeDepFromRegionAction',  '_route' => 'locazik_geo_listedepfromregion',);
         }
 
         if (0 === strpos($pathinfo, '/log')) {
