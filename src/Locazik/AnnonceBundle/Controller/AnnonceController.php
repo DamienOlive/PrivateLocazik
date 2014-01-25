@@ -32,7 +32,7 @@ class AnnonceController extends Controller
             if($form->isValid())
             {
                 $imageAnnonces = $annonce->getImageAnnonces();
-                //var_dump($imageAnnonces);exit();
+                
                 // possibilité d'upload plusieurs fichiers
                 if($imageAnnonces != null)
                 {
@@ -40,7 +40,6 @@ class AnnonceController extends Controller
                    {
                        if($imageAnnonce->getFile() != null)
                        {
-                           //var_dump($imageAnnonce->getFile());exit();
                            $imageAnnonce->setAnnonce($annonce);
                            $imageAnnonce->upload();
                        }
