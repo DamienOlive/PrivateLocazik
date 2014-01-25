@@ -9,9 +9,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CategorieController extends Controller
 {
-    public function indexAction()
+    public function listerCategorieService($entityManager)
     {
+        $listeParentCategories = $entityManager->getRepository('LocazikAnnonceBundle:Categorie')
+                                               ->listeCategorieOnline();
         
+        $listeCategorieOptions = array();
+        foreach($listeParentCategories as $parentCategorie){
+            foreach($parentCategorie->getChildren() as $child){
+                $listeCategorieOptions[$parentCategorie->getCategorieName()] = array($child->getId() => $child->getCategorieName());
+            }
+        }
+        return $listeCategorieOptions;
     }
     
     public function listerCategorieAction()

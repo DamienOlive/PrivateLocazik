@@ -38,7 +38,19 @@ class Region
      */
     private $nomregion;
 
-
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="urlregion", type="string", length=80, nullable=true)
+     */
+    private $urlregion;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="jsregion", type="string", length=80, nullable=true)
+     */
+    private $jsregion;
 
     /**
      * Get id
@@ -145,5 +157,51 @@ class Region
     public function getAnnonces()
     {
         return $this->annonces;
+    }
+
+    /**
+     * Set urlregion
+     *
+     * @param string $urlregion
+     * @return Region
+     */
+    public function setUrlregion($urlregion)
+    {
+        $this->urlregion = $urlregion;
+
+        return $this;
+    }
+
+    /**
+     * Get urlregion
+     *
+     * @return string 
+     */
+    public function getUrlregion()
+    {
+        return $this->urlregion;
+    }
+
+    /**
+     * Set jsregion
+     *
+     * @param string $jsregion
+     * @return Region
+     */
+    public function setJsregion($jsregion)
+    {
+        $this->jsregion = $jsregion;
+
+        return $this;
+    }
+
+    /**
+     * Get jsregion
+     *
+     * @return string 
+     */
+    public function getJsregion()
+    {
+        return $this->jsregion;
     }
 }

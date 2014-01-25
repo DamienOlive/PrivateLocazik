@@ -6,7 +6,8 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class LocazikUserBundle extends Bundle
 {
-    public function getParent() {
+    public function getParent() 
+    {
         return 'FOSUserBundle';
     }
 }

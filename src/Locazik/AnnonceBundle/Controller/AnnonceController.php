@@ -19,9 +19,10 @@ class AnnonceController extends Controller
     public function creerAnnonceAction()
     {
         $annonce = new Annonce();
-        
         $entityManager = $this->getDoctrine()->getManager();
-        $form = $this->createForm(new AnnonceType($entityManager), $annonce);
+        
+        $listeCategories = $this->get('categorie_service')->listerCategorieService($entityManager);
+        $form = $this->createForm(new AnnonceType($entityManager, $listeCategories), $annonce);
         
         $request = $this->get('request');
         
@@ -30,15 +31,16 @@ class AnnonceController extends Controller
             $form->bind($request);
             if($form->isValid())
             {
-                $imageAnnonces = $annonce->getImageAnnonces();                
+                $imageAnnonces = $annonce->getImageAnnonces();
+                //var_dump($imageAnnonces);exit();
                 // possibilité d'upload plusieurs fichiers
                 if($imageAnnonces != null)
                 {
                    foreach($imageAnnonces as $imageAnnonce)
                    {
-                       var_dump($imageAnnonce->getFile());
                        if($imageAnnonce->getFile() != null)
                        {
+                           //var_dump($imageAnnonce->getFile());exit();
                            $imageAnnonce->setAnnonce($annonce);
                            $imageAnnonce->upload();
                        }
@@ -50,20 +52,33 @@ class AnnonceController extends Controller
                 gerer controle insertion image ici malgré le controle plus haut
                 supprimer image quand pas d upload
                 */
+                
                 $entityManager->persist($annonce);
                 $entityManager->flush();
-                return $this->redirect($this->generateUrl('locazik_annonce_confirmer'));
+                return $this->redirect($this->generateUrl('locazik_user_login_before_confirm', 
+                                                            array('idAnnonce' => $annonce->getId())));
             }
         }
         
         return $this->render('LocazikAnnonceBundle:Annonce:creer.html.twig', array('form' => $form->createView()));
     }
     
-    public function listerAnnonceParRegionAction($id, $nom)
+    public function listerAnnonceParRegionAction($nomRegion)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $region = $entityManager->getRepository('LocazikAnnonceBundle:Region')->find($id);
-        $listeAnnonces = $region->getAnnonces();
+        $region = $entityManager->getRepository('LocazikAnnonceBundle:Region')->findOneBy(array('urlregion' => $nomRegion));
+        $data['region'] = $region->getId();
+        $listeAnnonces = $entityManager->getRepository('LocazikAnnonceBundle:Annonce')->listeAnnonceOnline($data);
+        
+        // TODO traiter quand 0 annonces -> retourner TOUTES les annonces
+        
+        $request = $this->get('request');
+        if($request->getMethod() === 'POST')
+        {
+            $data = $this->getRequest()->request->get('locazik_annoncebundle_rechercheannonces');
+            $listeAnnonces = $entityManager->getRepository('LocazikAnnonceBundle:Annonce')->listeAnnonceOnline($data);
+            $this->redirect();
+        }
         
         return $this->render('LocazikAnnonceBundle:Annonce:lister.html.twig', 
                 array('region' => $region, 'listeAnnonces' => $listeAnnonces));
@@ -132,6 +147,21 @@ class AnnonceController extends Controller
     public function confirmerCreationAnnonceAction()
     {
         return $this->render('LocazikAnnonceBundle:Annonce:confirmerCreation.html.twig');
+    }
+    
+    public function insertUserAnnonceService($entityManager, $idAnnonce, $user)
+    {
+        $annonceRepository = $entityManager->getRepository('LocazikAnnonceBundle:Annonce');
+        $annonce = $annonceRepository->find($idAnnonce);
+        
+        if($annonce !== null)
+        {
+            $annonce->setUser($user);
+            $entityManager->persist($annonce);
+            $entityManager->flush();
+            return true;
+        }
+        return false;
     }
     
 }

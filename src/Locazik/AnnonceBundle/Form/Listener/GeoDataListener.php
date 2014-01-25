@@ -62,7 +62,20 @@ class GeoDataListener implements EventSubscriberInterface
      
     public function preBind(FormEvent $event)
     {
+        
         $data = $event->getData();
+        if(isset($data['imageAnnonces'])){
+            foreach($data['imageAnnonces'] as $image){
+                if($image['file'] == null){
+                    array_shift($data['imageAnnonces']);
+                }
+            }
+            if(count($data['imageAnnonces'] <= 0))
+            {
+                $event->getForm()->get('imageAnnonces')->setData(null);
+            }
+        }
+        
         $depId = $data['departement'];
         $departement = $this->entityManager->getRepository('LocazikAnnonceBundle:Departement')->find($depId);
         if($departement != null)
@@ -71,14 +84,14 @@ class GeoDataListener implements EventSubscriberInterface
         }
         //var_dump($event->getForm()->get('imageAnnonces'));exit();
         $cp = $data['annonceCp'];
-        if (!empty($cp))
+        /*if (!empty($cp))
         {
             if(substr($cp, 0, 2) != $depId)
             {
                 $errorMsg = "Le code postal ne correspond pas au département sélectionné";
                 $event->getForm()->get('annonceCp')->addError(new FormError($errorMsg));
             }
-        }
+        }*/
     }
     
     public function postBind(FormEvent $event)

@@ -1,0 +1,48 @@
+{% extends "::base.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{%block title %} Identification {% endblock title %} 
+
+{% block body %}
+<div class="well">
+
+    <h3>Avant de créer votre annonce, veuillez d'abord vous identifier.</h3>
+
+    <span id="showAnnonceConnexionCompte">J'ai déjà un compte</span><br />
+    
+    <div id="annonceConnexionCompte">
+        {% for error in app.session.flashbag.get('error') %}
+        <div class="flash-notice">
+            {{ error|trans }}
+        </div>
+        {% endfor %}
+        <form action="{{ path("fos_user_security_check") }}" method="post">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+
+            <label for="username">Adresse e-mail</label>
+            <input type="text" id="username" name="_username" required="required" />
+
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="_password" required="required" />
+
+            <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+            <label for="remember_me">se souvenir de moi</label>
+
+            <input type="submit" id="_submit" name="_submit" value="Connexion" />
+        </form>
+    </div>
+    <br /><br />
+    <hr>
+
+    {{ form_errors(formRegistration) }}
+    <div id="annonceCreationCompte">
+        <form method="post" {{ form_enctype(formRegistration) }}>
+        {{ form_widget(formRegistration) }}
+            <div style="clear:both;"></div>
+            <br />
+            <input type="submit" value="Valider" class="btn btn-info" />
+        </form>
+    </div>
+</div>
+{% endblock %}

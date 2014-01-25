@@ -74,4 +74,21 @@ fos_user:
     db_driver: orm
     firewall_name: main
     user_class: Locazik\UserBundle\Entity\User
+    registration:
+        confirmation:
+            enabled: false
+        form:
+            type: locazik_userbundle_userregistration
     
+liip_imagine:
+    filter_sets:
+        liste_annonce:
+            filters:
+                relative_resize: { widen: 160 }
+    
+services:
+    locazik_user_login_handler:
+        class:  Locazik\UserBundle\Component\Authentification\Handler\LoginHandler
+        arguments:  [@router, @security.context]
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }

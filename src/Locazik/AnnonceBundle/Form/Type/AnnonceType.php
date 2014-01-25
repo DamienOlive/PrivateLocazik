@@ -12,10 +12,12 @@ use Locazik\AnnonceBundle\Form\Listener;
 class AnnonceType extends AbstractType
 {
     private $entityManager;
+    private $listeCategories;
     
-    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
+    public function __construct(\Doctrine\ORM\EntityManager $entityManager, array $listeCategories)
     {
         $this->entityManager = $entityManager;
+        $this->listeCategories = $listeCategories;
     }
     
     /**
@@ -24,33 +26,30 @@ class AnnonceType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $transformer = new \Locazik\AnnonceBundle\Form\DataTransformer\IntToCategorieTransformer($this->entityManager);
+        
         $builder
             ->add('region', 'entity', array(
                   'class'    => 'LocazikAnnonceBundle:Region',
                   'property' => 'nomRegion',
+                  'empty_value' => 'Choisissez la région',
                   'query_builder' => function(\Locazik\AnnonceBundle\Entity\Repository\RegionRepository $r) {
                       return $r->listeRegionOrderBy();
                   },
                   'label' => 'Région :',
                   'attr' => array('onchange' => 'listeDepFromRegion(this.value);')))
-            /*->add('departement', 'entity', array(
-                  'class'    => 'LocazikAnnonceBundle:Departement',
-                  'property' => 'nomDepartement',
-                  'label' => 'Département :'))*/
             ->add('departement', 'entity', array(
                   'class'    => 'LocazikAnnonceBundle:Departement',
+                  'empty_value' => 'Choisissez le département',
+                  //'choices' => array(),
                   'property' => 'nomDepartement',
                   'label' => 'Département :'))
             ->add('annonceCp', 'text')
+            ->add($builder->create('categorie', 'choice', array('label' => 'Catégorie :','choices' => $this->listeCategories))
+                  ->addModelTransformer($transformer))
             ->add('annonceName', 'text', array('label' => 'Titre de l\'annonce :'))
             ->add('annonceDesc', 'textarea', array('label' => 'Texte de l\'annonce :'))
             ->add('annoncePrix', 'text', array('label' => 'Prix à la journée :'))
-            ->add('categorie', 'entity', array(
-                  'class'    => 'LocazikAnnonceBundle:Categorie',
-                  'property' => 'categorieName',
-                  'query_builder' => function(\Locazik\AnnonceBundle\Entity\Repository\CategorieRepository $c) {
-                      return $c->listeCategorieOnline();
-                  }))
             ->add('imageAnnonces', 'collection', 
                     array('type' => new ImageAnnonceType(),
                         'allow_add'    => true, 

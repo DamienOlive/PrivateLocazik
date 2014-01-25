@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Annonce
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Locazik\AnnonceBundle\Entity\Repository\AnnonceRepository")
  */
 class Annonce
 {
@@ -22,6 +22,12 @@ class Annonce
      * @ORM\JoinColumn(nullable=false)
     */
     private $categorie;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Locazik\UserBundle\Entity\User", inversedBy="annonces")
+     * @ORM\JoinColumn(nullable=true)
+    */
+    private $user;
     
     /**
      * @ORM\ManyToOne(targetEntity="Locazik\AnnonceBundle\Entity\Region", inversedBy="annonces")
@@ -281,9 +287,11 @@ class Annonce
      */
     public function addImageAnnonce(\Locazik\AnnonceBundle\Entity\ImageAnnonce $imageAnnonces)
     {
-        $this->imageAnnonces[] = $imageAnnonces;
-
-        return $this;
+        if($imageAnnonces->getFile() != null)
+        {
+            $this->imageAnnonces[] = $imageAnnonces;
+            return $this;
+        }
     }
 
     /**
@@ -373,5 +381,28 @@ class Annonce
     public function getDepartement()
     {
         return $this->departement;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Locazik\UserBundle\Entity\User $user
+     * @return Annonce
+     */
+    public function setUser(\Locazik\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Locazik\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

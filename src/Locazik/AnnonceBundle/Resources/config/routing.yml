@@ -14,10 +14,14 @@ locazik_categorie_ajouter:
 locazik_categorie_detail:
     pattern:  /categorie/detail/{id}/
     defaults: { _controller: LocazikAnnonceBundle:Categorie:detailCategorie }
+    requirements:
+        id:  \d+
     
 locazik_categorie_modifier:
     pattern:  /categorie/gerer/{id}/
     defaults: { _controller: LocazikAnnonceBundle:Categorie:gererCategorie }
+    requirements:
+        id:  \d+
     
 locazik_categorie_supprimer:
     pattern:  /categorie/supprimer/
@@ -31,11 +35,24 @@ locazik_annonce_creer:
     
 locazik_annonce_validation:
     pattern:  /annonce/valider/{id}/
-    defaults: { _controller: LocazikAnnonceBundle:Annonce:validerAnnonce } 
+    defaults: { _controller: LocazikAnnonceBundle:Annonce:validerAnnonce }
+    requirements:
+        id:  \d+
     
 locazik_annonce_supprimer:
     pattern:  /annonce/supprimer/{id}/
     defaults: { _controller: LocazikAnnonceBundle:Annonce:supprimerAnnonce } 
+    requirements:
+        id:  \d+
+     
+# POUR DES RAISONS DE LOGIQUE, CETTE ROUTE SE TROUVE DANS LE BUNDLE USER
+# PERMET la connexion/inscription avant de valider l'ajout d'une annonce
+#
+#locazik_user_login_before_confirm:
+#    pattern:  /annonce/identification/{idAnnonce}/
+#    defaults: { _controller: LocazikUserBundle:User:identificationConfirmAnnonce }
+#    requirements:
+#        idAnnonce:  \d+
     
 locazik_annonce_confirmer:
     pattern:  /annonce/confirmer/
@@ -48,9 +65,11 @@ locazik_annonce_lister:
 locazik_annonce_detail:
     pattern:  /annonce/detail/{id}/
     defaults: { _controller: LocazikAnnonceBundle:Annonce:detailAnnonce }
+    requirements:
+        id:  \d+
     
 locazik_annonce_listerRegion:
-    pattern:  /annonces/{id}/{nom}/
+    pattern:  /annonces/{nomRegion}/
     defaults: { _controller: LocazikAnnonceBundle:Annonce:listerAnnonceParRegion }
     
     

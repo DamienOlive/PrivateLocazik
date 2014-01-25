@@ -1,0 +1,49 @@
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <form method="post" {{ form_enctype(form) }}>
+            <ul class="nav navbar-nav">
+                <li>
+                {{ form_label(form.keyword) }}
+                {{ form_errors(form.keyword) }}
+                {{ form_widget(form.keyword) }}
+                </li>
+                <li>
+                {{ form_label(form.categorie) }}
+                {{ form_errors(form.categorie) }}
+                {{ form_widget(form.categorie) }}
+                </li>
+                <li>
+                {{ form_label(form.region) }}
+                {{ form_errors(form.region) }}
+                {{ form_widget(form.region) }}
+                </li>
+                <li>
+                {{ form_label(form.departement) }}
+                {{ form_errors(form.departement) }}
+                {{ form_widget(form.departement) }}
+                </li>
+            </ul>
+            <input type="submit" value="Chercher" class="btn btn-info" />
+        </form>
+    </div>
+</nav>
+
+<script type="text/javascript">
+    var listeDepFromRegion = function(idRegion) {
+        $.post("{{ path('locazik_geo_listedepfromregion') }}", {idRegion: idRegion}, function(data) {
+            if (data['result'] == 'success') {
+                $('#locazik_annoncebundle_rechercheannonces_departement').html('');
+                $.each(data['data'], function(key, value) {
+                    $('#locazik_annoncebundle_rechercheannonces_departement').append(new Option( value.departement, value.id, true, true));
+                });
+            } else {
+                alertBox(BootstrapDialog.TYPE_DANGER, 
+                    'Erreur de chargement', 
+                    'Il y a eu une erreur de chargement. <br />Veuillez réessayer.<br /> \n\
+                    Si le problème perdure, merci de contacter un administrateur.'
+                );
+            }
+        });
+    }
+</script>

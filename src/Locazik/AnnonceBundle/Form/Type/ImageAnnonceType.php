@@ -5,6 +5,8 @@ namespace Locazik\AnnonceBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class ImageAnnonceType extends AbstractType
 {
@@ -16,7 +18,7 @@ class ImageAnnonceType extends AbstractType
     {
         $builder
             ->add('file', 'file', array('label' => false, 'required' => false))
-        ;
+        ;        
     }
     
     /**

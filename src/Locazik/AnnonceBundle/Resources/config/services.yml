@@ -5,3 +5,10 @@ services:
 #    locazik_categorie.example:
 #        class: %locazik_categorie.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+
+    categorie_service:
+        class: Locazik\AnnonceBundle\Controller\CategorieController
+    geo_service:
+        class: Locazik\AnnonceBundle\Controller\GeoController
+    annonce_service:
+        class: Locazik\AnnonceBundle\Controller\AnnonceController

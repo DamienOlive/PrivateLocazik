@@ -135,9 +135,13 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
-        // locazik_user_homepage
-        if (0 === strpos($pathinfo, '/hello') && preg_match('#^/hello/(?P<name>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_user_homepage')), array (  '_controller' => 'Locazik\\UserBundle\\Controller\\DefaultController::indexAction',));
+        // locazik_user_login_before_confirm
+        if (0 === strpos($pathinfo, '/annonce/identification') && preg_match('#^/annonce/identification/(?P<idAnnonce>\\d+)/?$#s', $pathinfo, $matches)) {
+            if (substr($pathinfo, -1) !== '/') {
+                return $this->redirect($pathinfo.'/', 'locazik_user_login_before_confirm');
+            }
+
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_user_login_before_confirm')), array (  '_controller' => 'Locazik\\UserBundle\\Controller\\UserController::identificationConfirmAnnonceAction',));
         }
 
         // locazik_homepage
@@ -169,7 +173,7 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             }
 
             // locazik_categorie_detail
-            if (0 === strpos($pathinfo, '/categorie/detail') && preg_match('#^/categorie/detail/(?P<id>[^/]++)/?$#s', $pathinfo, $matches)) {
+            if (0 === strpos($pathinfo, '/categorie/detail') && preg_match('#^/categorie/detail/(?P<id>\\d+)/?$#s', $pathinfo, $matches)) {
                 if (substr($pathinfo, -1) !== '/') {
                     return $this->redirect($pathinfo.'/', 'locazik_categorie_detail');
                 }
@@ -178,7 +182,7 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             }
 
             // locazik_categorie_modifier
-            if (0 === strpos($pathinfo, '/categorie/gerer') && preg_match('#^/categorie/gerer/(?P<id>[^/]++)/?$#s', $pathinfo, $matches)) {
+            if (0 === strpos($pathinfo, '/categorie/gerer') && preg_match('#^/categorie/gerer/(?P<id>\\d+)/?$#s', $pathinfo, $matches)) {
                 if (substr($pathinfo, -1) !== '/') {
                     return $this->redirect($pathinfo.'/', 'locazik_categorie_modifier');
                 }
@@ -208,7 +212,7 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             }
 
             // locazik_annonce_validation
-            if (0 === strpos($pathinfo, '/annonce/valider') && preg_match('#^/annonce/valider/(?P<id>[^/]++)/?$#s', $pathinfo, $matches)) {
+            if (0 === strpos($pathinfo, '/annonce/valider') && preg_match('#^/annonce/valider/(?P<id>\\d+)/?$#s', $pathinfo, $matches)) {
                 if (substr($pathinfo, -1) !== '/') {
                     return $this->redirect($pathinfo.'/', 'locazik_annonce_validation');
                 }
@@ -217,7 +221,7 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             }
 
             // locazik_annonce_supprimer
-            if (0 === strpos($pathinfo, '/annonce/supprimer') && preg_match('#^/annonce/supprimer/(?P<id>[^/]++)/?$#s', $pathinfo, $matches)) {
+            if (0 === strpos($pathinfo, '/annonce/supprimer') && preg_match('#^/annonce/supprimer/(?P<id>\\d+)/?$#s', $pathinfo, $matches)) {
                 if (substr($pathinfo, -1) !== '/') {
                     return $this->redirect($pathinfo.'/', 'locazik_annonce_supprimer');
                 }
@@ -244,7 +248,7 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             }
 
             // locazik_annonce_detail
-            if (0 === strpos($pathinfo, '/annonce/detail') && preg_match('#^/annonce/detail/(?P<id>[^/]++)/?$#s', $pathinfo, $matches)) {
+            if (0 === strpos($pathinfo, '/annonce/detail') && preg_match('#^/annonce/detail/(?P<id>\\d+)/?$#s', $pathinfo, $matches)) {
                 if (substr($pathinfo, -1) !== '/') {
                     return $this->redirect($pathinfo.'/', 'locazik_annonce_detail');
                 }
@@ -253,7 +257,7 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             }
 
             // locazik_annonce_listerRegion
-            if (0 === strpos($pathinfo, '/annonces') && preg_match('#^/annonces/(?P<id>[^/]++)/(?P<nom>[^/]++)/?$#s', $pathinfo, $matches)) {
+            if (0 === strpos($pathinfo, '/annonces') && preg_match('#^/annonces/(?P<nomRegion>[^/]++)/?$#s', $pathinfo, $matches)) {
                 if (substr($pathinfo, -1) !== '/') {
                     return $this->redirect($pathinfo.'/', 'locazik_annonce_listerRegion');
                 }
@@ -463,6 +467,17 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             return array (  '_controller' => 'FOS\\UserBundle\\Controller\\ChangePasswordController::changePasswordAction',  '_route' => 'fos_user_change_password',);
         }
         not_fos_user_change_password:
+
+        // _imagine_liste_annonce
+        if (0 === strpos($pathinfo, '/media/cache/liste_annonce') && preg_match('#^/media/cache/liste_annonce/(?P<path>.+)$#s', $pathinfo, $matches)) {
+            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                $allow = array_merge($allow, array('GET', 'HEAD'));
+                goto not__imagine_liste_annonce;
+            }
+
+            return $this->mergeDefaults(array_replace($matches, array('_route' => '_imagine_liste_annonce')), array (  '_controller' => 'liip_imagine.controller:filterAction',  'filter' => 'liste_annonce',));
+        }
+        not__imagine_liste_annonce:
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }

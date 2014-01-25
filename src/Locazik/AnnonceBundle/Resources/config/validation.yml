@@ -3,4 +3,7 @@ Locazik\AnnonceBundle\Entity\ImageAnnonce:
     properties:
         file:
             - File:
-                maxSize: 1000000
+                maxSize: 2048k
+                maxSizeMessage: 'Taille maximale de fichier autorisée : 2048ko'
+                mimeTypes: [application/jpeg, application/png]
+                mimeTypesMessage: Le type de l'image n'est pas correct (jpg ou png)

@@ -1,3 +1,6 @@
-locazik_user_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: LocazikUserBundle:Default:index }
+    
+locazik_user_login_before_confirm:
+    pattern:  /annonce/identification/{idAnnonce}/
+    defaults: { _controller: LocazikUserBundle:User:identificationConfirmAnnonce }
+    requirements:
+        idAnnonce:  \d+

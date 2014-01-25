@@ -4,6 +4,16 @@
     float: left;
 }
 
+.regionHover, .regionHover a:hover a:focus{
+    background: #39B3D7; 
+    border-radius: 3px; 
+    padding: 3px; 
+    color: white !important;
+    text-decoration: none !important;
+    font-style: normal;
+}
+
+
 .photoAnnonce{
     width: 300px;
     float: left;
@@ -15,7 +25,7 @@
     font-weight: normal;
     padding: 20px 20px 0 0;
     text-align: right;
-    width: 90px;
+    width: 120px;
 }
 
 .photoListeAnnonce{
@@ -52,4 +62,16 @@
     
 .clear{
     clear: both;
+}
+
+#showAnnonceConnexionCompte{
+    cursor: pointer;
+}
+
+#annonceConnexionCompte{
+    display: none;
+}
+
+#annonceCreationCompte{
+    
 }

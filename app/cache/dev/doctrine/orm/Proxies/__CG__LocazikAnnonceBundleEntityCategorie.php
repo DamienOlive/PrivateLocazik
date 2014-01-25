@@ -64,10 +64,10 @@ class Categorie extends \Locazik\AnnonceBundle\Entity\Categorie implements \Doct
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'annonces', 'id', 'categorieName', 'categorieDesc', 'categorieParentId', 'isOnline', 'dateCreation', 'dateUpdate', 'categorieParentName');
+            return array('__isInitialized__', 'annonces', 'id', 'categorieName', 'categorieDesc', 'parent', 'children', 'isOnline', 'dateCreation', 'dateUpdate');
         }
 
-        return array('__isInitialized__', 'annonces', 'id', 'categorieName', 'categorieDesc', 'categorieParentId', 'isOnline', 'dateCreation', 'dateUpdate', 'categorieParentName');
+        return array('__isInitialized__', 'annonces', 'id', 'categorieName', 'categorieDesc', 'parent', 'children', 'isOnline', 'dateCreation', 'dateUpdate');
     }
 
     /**
@@ -235,28 +235,6 @@ class Categorie extends \Locazik\AnnonceBundle\Entity\Categorie implements \Doct
     /**
      * {@inheritDoc}
      */
-    public function setCategorieParentId($categorieParentId)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCategorieParentId', array($categorieParentId));
-
-        return parent::setCategorieParentId($categorieParentId);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getCategorieParentId()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCategorieParentId', array());
-
-        return parent::getCategorieParentId();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setDateCreation($dateCreation)
     {
 
@@ -312,28 +290,6 @@ class Categorie extends \Locazik\AnnonceBundle\Entity\Categorie implements \Doct
     /**
      * {@inheritDoc}
      */
-    public function getCategorieParentName()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCategorieParentName', array());
-
-        return parent::getCategorieParentName();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setCategorieParentName($categorieParentName)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCategorieParentName', array($categorieParentName));
-
-        return parent::setCategorieParentName($categorieParentName);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getIsOnline()
     {
 
@@ -362,6 +318,72 @@ class Categorie extends \Locazik\AnnonceBundle\Entity\Categorie implements \Doct
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAnnonces', array());
 
         return parent::getAnnonces();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addAnnonce(\Locazik\AnnonceBundle\Entity\Annonce $annonces)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addAnnonce', array($annonces));
+
+        return parent::addAnnonce($annonces);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setParent(\Locazik\AnnonceBundle\Entity\Categorie $parent = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setParent', array($parent));
+
+        return parent::setParent($parent);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getParent()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getParent', array());
+
+        return parent::getParent();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addChild(\Locazik\AnnonceBundle\Entity\Categorie $children)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addChild', array($children));
+
+        return parent::addChild($children);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeChild(\Locazik\AnnonceBundle\Entity\Categorie $children)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeChild', array($children));
+
+        return parent::removeChild($children);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getChildren()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getChildren', array());
+
+        return parent::getChildren();
     }
 
 }

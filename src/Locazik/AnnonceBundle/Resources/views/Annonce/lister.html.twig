@@ -3,9 +3,12 @@
 {% block title %}{{ parent() }} Liste annonces{% endblock %}
 
 {% block body %}
+    
+    {{ render(controller("LocazikAnnonceBundle:AnnonceSearch:searchBar")) }}
+    <br /><br />
 
     {{ region.nomRegion }}<br />
-    Nombre d'annonces {{ listeAnnonces.count }}
+    Nombre d'annonces {{ listeAnnonces|length }}
     <ul class="list-group">
     {% for annonce in listeAnnonces %}
         <a href="{{ path('locazik_annonce_detail', { 'id': annonce.id }) }}">
@@ -13,13 +16,16 @@
                 <div class="dateListeAnnonce">{{ annonce.dateCreation|date('d-m-Y') }}</div>
                 <div class="photoListeAnnonce">
                     {% for image in annonce.getImageAnnonces()|slice(0,1) %}
-                        <img src="{{ asset(image.getUploadDir()~image.getImageName()) }}" width="159" /><br />
+                        {% set imageLink = image.getUploadDir()~image.getImageName() %}
+                        <img src="{{ imageLink | imagine_filter('liste_annonce') }}" /><br />
                         <small>{{ annonce.getImageAnnonces().count }} photo(s)</small>
                     {% endfor %}
                 </div>
                 <div class="detailListeAnnonce">
                     <div class="title">{{ annonce.annonceName|e }}</div>
-                    <div class="category">{{ annonce.categorie.getCategorieName() }}</div>
+                    <div class="category">
+                        {{ annonce.categorie.getParent().getCategorieName()~' / '~annonce.categorie.getCategorieName() }}
+                    </div>
                     <div class="placement"> Salses-le-Château / Pyrénées-Orientales </div>
                     <div class="price">{{ annonce.annoncePrix}}€/jour</div>
                     <p></p>

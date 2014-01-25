@@ -14,6 +14,18 @@ use Doctrine\ORM\Query\ResultSetMapping;
  */
 class CategorieRepository extends EntityRepository
 {
+    public function listeCategorieOnline()
+    {
+        $queryBuilder = $this->_em->createQueryBuilder();
+        return $listeAnnonceParent = $queryBuilder
+                ->select('c')
+                ->from($this->_entityName, 'c')
+                ->where('c.isOnline = :isOnline AND c.parent IS NULL')
+                ->setParameter('isOnline', true)
+                ->getQuery()
+                ->getResult();
+    }
+    
     public function categoriesOrderbyParent()
     {
         $query = 'SELECT c.id, c.categorieName, c.isOnline, e.parent_id, c.categorieDesc, c.dateUpdate FROM Categorie c, Categorie e ORDER BY COALESCE(c.parent_id, c.id) , c.parent_id IS NOT NULL , c.id';
@@ -32,7 +44,7 @@ class CategorieRepository extends EntityRepository
         return $qns->getResult();
     }
     
-    public function listeCategorieOnline()
+    public function listeCategorieOnline2()
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         return $queryBuilder

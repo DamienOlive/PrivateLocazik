@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class GeoController extends Controller
 {
-    public function listerRegionHomePageAction()
+    public function listerRegionAction()
     {
         $entityManager = $this->getDoctrine()->getManager();
         $query = $entityManager->getRepository('LocazikAnnonceBundle:Region')->listeRegionOrderBy();

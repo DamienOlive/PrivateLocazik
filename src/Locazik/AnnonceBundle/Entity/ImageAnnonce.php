@@ -191,6 +191,7 @@ class ImageAnnonce
     public function upload()
     {
         // Si jamais il n'y a pas de fichier (champ facultatif)
+        
         if ($this->file === null) {
             return;
         }
@@ -207,7 +208,7 @@ class ImageAnnonce
         return 'uploads/img/';
     }
 
-    protected function getUploadRootDir()
+    public function getUploadRootDir()
     {
         // On retourne le chemin relatif vers l'image pour notre code PHP
         return __DIR__.'/../../../../web/'.$this->getUploadDir();
