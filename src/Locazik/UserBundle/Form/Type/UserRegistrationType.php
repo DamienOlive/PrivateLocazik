@@ -10,6 +10,16 @@ use FOS\UserBundle\Form\Type\RegistrationFormType as BaseType;
 
 class UserRegistrationType extends BaseType
 {
+    private $class;
+
+    /**
+     * @param string $class The User class name
+     */
+    public function __construct($class)
+    {
+        $this->class = $class;
+    }
+    
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -28,7 +38,9 @@ class UserRegistrationType extends BaseType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'validation_groups' => array('Registration')
+            'data_class' => $this->class,
+            'intention'  => 'registration',
+            'validation_groups' => array('Registration'),
         ));
     }
     

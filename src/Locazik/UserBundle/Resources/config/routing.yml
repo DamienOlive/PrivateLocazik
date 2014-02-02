@@ -2,3 +2,15 @@
 locazik_user_login_before_confirm:
     pattern:  /annonce/identification/{annonceKey}/
     defaults: { _controller: LocazikUserBundle:User:identificationConfirmAnnonce }
+    
+fos_user_profile_show:
+    pattern:  /
+    defaults: { _controller: FOSUserBundle:Profile:show }
+    
+fos_user_profile_edit:
+    pattern:  /modifier
+    defaults: { _controller: FOSUserBundle:Profile:edit }
+    
+fos_user_change_password:
+    pattern:  /change-password
+    defaults: { _controller: FOSUserBundle:ChangePassword:changePassword}
