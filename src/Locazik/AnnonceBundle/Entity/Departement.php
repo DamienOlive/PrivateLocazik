@@ -51,8 +51,13 @@ class Departement
      */
     private $nomdepartement;
 
-
-
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="urldepartement", type="string", length=80)
+     */
+    private $urldepartement;
+    
     /**
      * Get id
      *
@@ -204,5 +209,28 @@ class Departement
     public function getRegion()
     {
         return $this->region;
+    }
+
+    /**
+     * Set urldepartement
+     *
+     * @param string $urldepartement
+     * @return Departement
+     */
+    public function setUrldepartement($urldepartement)
+    {
+        $this->urldepartement = $urldepartement;
+
+        return $this;
+    }
+
+    /**
+     * Get urldepartement
+     *
+     * @return string 
+     */
+    public function getUrldepartement()
+    {
+        return $this->urldepartement;
     }
 }

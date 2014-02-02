@@ -10,7 +10,7 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class UserController extends Controller
 {
-    public function identificationConfirmAnnonceAction($idAnnonce)
+    public function identificationConfirmAnnonceAction($annonceKey)
     {
         $entityManager = $this->getDoctrine()->getManager();
         
@@ -18,7 +18,7 @@ class UserController extends Controller
         if ($this->container->get('security.context')->isGranted('ROLE_USER'))
         {
             $user = $this->get('security.context')->getToken()->getUser();
-            $result = $this->get('annonce_service')->insertUserAnnonceService($entityManager, $idAnnonce, $user);
+            $result = $this->get('annonce_service')->insertUserAnnonceService($entityManager, $annonceKey, $user);
             if($result)
             {
                 return $this->redirect($this->generateUrl('locazik_annonce_confirmer'));
@@ -37,24 +37,20 @@ class UserController extends Controller
             $formRegistration->bind($request);
             if($formRegistration->isValid())
             {
-                try
-                {
-                    $userManager = $this->get('fos_user.user_manager');
-                    $user->setEnabled(true);
-                    $userManager->updateUser($user);
+                $userManager = $this->get('fos_user.user_manager');
+                $user->setEnabled(true);
+                $userManager->updateUser($user);
 
-                    $providerKey = $this->container->getParameter('fos_user.firewall_name');
-                    $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
-                    $this->container->get('security.context')->setToken($token);
+                $providerKey = $this->container->getParameter('fos_user.firewall_name');
+                $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
+                $this->container->get('security.context')->setToken($token);
 
-                    $event = new InteractiveLoginEvent($request, $token);
-                    $this->get("event_dispatcher")->dispatch("security.authentication", $event);
+                $event = new InteractiveLoginEvent($request, $token);
+                $this->get("event_dispatcher")->dispatch("security.authentication", $event);
 
-                    return $this->redirect($request->headers->get('referer'));
-                } catch (Exception $ex) {
-                    $this->get('session')->setFlash('inscriptionError', "Il y a eu un problème lors de l'inscription");
-                }
-                
+                $this->sendRegistrationEmail($user);
+
+                return $this->redirect($request->headers->get('referer')); 
             }
         }
         
@@ -65,5 +61,22 @@ class UserController extends Controller
         return $this->render('LocazikUserBundle:Identification:identification.html.twig', 
                             array('formRegistration' => $formRegistration->createView(), 
                                   'csrf_token' => $csrfToken));
+    }
+    
+    private function sendRegistrationEmail($user)
+    {
+        if($user)
+        {
+            $email = $user->getEmail();
+            $username = $user->getUsername();
+            
+            $message = \Swift_Message::newInstance()
+                        ->setSubject('Locazik - Confirmation Inscription')
+                        ->setFrom($this->container->getParameter('mailer_adress'))
+                        ->setTo($user->getEmail())
+                        ->setBody($this->renderView('LocazikUserBundle:Email:confirmation.txt.twig', 
+                                                        array('username' => $username, 'mail' => $email)));
+            $this->get('mailer')->send($message);
+        }
     }
 }

@@ -3,12 +3,11 @@
 {% block title %}{{ parent() }} Liste annonces{% endblock %}
 
 {% block body %}
-    
-    {{ render(controller("LocazikAnnonceBundle:AnnonceSearch:searchBar")) }}
+
+    {{ render(controller("LocazikAnnonceBundle:AnnonceSearch:searchBar", { 'data': data, 'region': region, 'nbAnnonces': listeAnnonces.getTotalItemCount })) }}
     <br /><br />
 
-    {{ region.nomRegion }}<br />
-    Nombre d'annonces {{ listeAnnonces|length }}
+    
     <ul class="list-group">
     {% for annonce in listeAnnonces %}
         <a href="{{ path('locazik_annonce_detail', { 'id': annonce.id }) }}">
@@ -26,7 +25,8 @@
                     <div class="category">
                         {{ annonce.categorie.getParent().getCategorieName()~' / '~annonce.categorie.getCategorieName() }}
                     </div>
-                    <div class="placement"> Salses-le-Château / Pyrénées-Orientales </div>
+                    <div class="placement"> {{ annonce.getVille().getNom() }} / 
+                                            {{ annonce.getDepartement().getNomdepartement() }} </div>
                     <div class="price">{{ annonce.annoncePrix}}€/jour</div>
                     <p></p>
                 </div>
@@ -35,6 +35,10 @@
         </a>
     {% endfor %}
     </ul>
+    
+    <div class="navigation">
+        {{ knp_pagination_render(listeAnnonces) }}
+    </div>
     
     <a href="{{path('locazik_annonce_creer') }}">Ajouter des annonces</a>
 

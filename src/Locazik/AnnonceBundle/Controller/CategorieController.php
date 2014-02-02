@@ -17,9 +17,10 @@ class CategorieController extends Controller
         $listeCategorieOptions = array();
         foreach($listeParentCategories as $parentCategorie){
             foreach($parentCategorie->getChildren() as $child){
-                $listeCategorieOptions[$parentCategorie->getCategorieName()] = array($child->getId() => $child->getCategorieName());
+                $listeCategorieOptions[$parentCategorie->getCategorieName()][$child->getId()] = $child->getCategorieName();
             }
         }
+        //var_dump($listeCategorieOptions);exit();
         return $listeCategorieOptions;
     }
     
@@ -81,6 +82,11 @@ class CategorieController extends Controller
             
             if($form->isValid())
             {
+                $toolBox = $this->get('urlify_helper');
+                $categorieName = $categorie->getCategorieName();
+                $categorieUrl = $toolBox::filter($categorie->getParent()->getCategorieUrl().'-'.$categorieName);
+                $categorie->setCategorieUrl($categorieUrl);
+                $categorie->setCategorieName(ucfirst($categorieName));
                 $entityManager->persist($categorie);
                 $entityManager->flush();
                 return $this->redirect( $this->generateUrl('locazik_categorie_detail', array('id' => $categorie->getId())) );   

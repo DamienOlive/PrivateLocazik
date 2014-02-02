@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Locazik\UserBundle\LocazikUserBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -38,6 +38,14 @@ class Categorie
     /**
      * @var string
      *
+     * @ORM\Column(name="CategorieUrl", type="string", length=80)
+     * @Assert\Length(min=5, minMessage="La catégorie url doit faire au moins {{ limit }} caractères.")
+     */
+    private $categorieUrl;
+    
+    /**
+     * @var string
+     *
      * @ORM\Column(name="CategorieDesc", type="text")
      * @Assert\Length(min=20, minMessage="La description doit faire au moins {{ limit }} caractères.")
      */
@@ -300,5 +308,28 @@ class Categorie
     public function getChildren()
     {
         return $this->children;
+    }
+
+    /**
+     * Set categorieUrl
+     *
+     * @param string $categorieUrl
+     * @return Categorie
+     */
+    public function setCategorieUrl($categorieUrl)
+    {
+        $this->categorieUrl = $categorieUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get categorieUrl
+     *
+     * @return string 
+     */
+    public function getCategorieUrl()
+    {
+        return $this->categorieUrl;
     }
 }

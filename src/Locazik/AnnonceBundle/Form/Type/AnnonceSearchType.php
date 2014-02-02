@@ -38,19 +38,22 @@ class AnnonceSearchType extends AbstractType
             ->add('region', 'entity', array(
                   'class'    => 'LocazikAnnonceBundle:Region',
                   'property' => 'nomRegion',
-                  'query_builder' => function(\Locazik\AnnonceBundle\Entity\Repository\RegionRepository $r) {
+                  'query_builder' => function(\Locazik\AnnonceBundle\Entity\Repository\GeoRepository $r) {
                       return $r->listeRegionOrderBy();
                   },
                   'label' => false,
                   'required' => false,
-                  'attr' => array('onchange' => 'listeDepFromRegion(this.value, '.$this->getName().');')))
+                  'attr' => array('onchange' => 'listeDepFromRegion(this.value, "'.$this->getName().'");')))
             ->add('departement', 'entity', array(
                   'class'    => 'LocazikAnnonceBundle:Departement',
                   'choices' => array(),
                   'required' => false,
                   'empty_value' => 'Veuillez choisir une région',
                   'label' => false,
-                  'property' => 'nomDepartement'));
+                  'property' => 'nomDepartement'))
+            ->add('ville', 'text', array(
+                  'attr' => array('class'=>'autocompleteCpAnnonceCreation'),
+                  'required' => false));
                   
         $listener = new \Locazik\AnnonceBundle\Form\Listener\GeoDataListener($builder->getFormFactory(),$this->entityManager);
         $builder->addEventSubscriber($listener);   

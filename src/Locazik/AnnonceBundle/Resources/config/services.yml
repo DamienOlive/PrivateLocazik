@@ -12,3 +12,5 @@ services:
         class: Locazik\AnnonceBundle\Controller\GeoController
     annonce_service:
         class: Locazik\AnnonceBundle\Controller\AnnonceController
+    urlify_helper:
+        class: Locazik\AnnonceBundle\Helper\URLify

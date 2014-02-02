@@ -20,6 +20,9 @@ class CategorieType extends AbstractType
               'property' => 'categorieName',
               'empty_data'  => null,
               'empty_value' => "Aucune",
+              'query_builder' => function(\Locazik\AnnonceBundle\Entity\Repository\CategorieRepository $r) {
+                  return $r->listeParent();
+              },
               'label' => 'Catégorie parente :',
               'required' => false))
             ->add('categorieName', 'text', array('label' => 'Nom :'))

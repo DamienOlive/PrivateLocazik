@@ -1,0 +1,8 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}Projet Locazik
+${licensePrefix}@author Damien Olive
+<#if licenseLast??>
+${licenseLast}
+</#if>

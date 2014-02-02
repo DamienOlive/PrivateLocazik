@@ -136,7 +136,7 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
         }
 
         // locazik_user_login_before_confirm
-        if (0 === strpos($pathinfo, '/annonce/identification') && preg_match('#^/annonce/identification/(?P<idAnnonce>\\d+)/?$#s', $pathinfo, $matches)) {
+        if (0 === strpos($pathinfo, '/annonce/identification') && preg_match('#^/annonce/identification/(?P<annonceKey>[^/]++)/?$#s', $pathinfo, $matches)) {
             if (substr($pathinfo, -1) !== '/') {
                 return $this->redirect($pathinfo.'/', 'locazik_user_login_before_confirm');
             }
@@ -244,25 +244,29 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                     return $this->redirect($pathinfo.'/', 'locazik_annonce_lister');
                 }
 
-                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::listerAnnonceAction',  '_route' => 'locazik_annonce_lister',);
+                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::listerAnnonceAdminAction',  '_route' => 'locazik_annonce_lister',);
             }
 
-            // locazik_annonce_detail
-            if (0 === strpos($pathinfo, '/annonce/detail') && preg_match('#^/annonce/detail/(?P<id>\\d+)/?$#s', $pathinfo, $matches)) {
-                if (substr($pathinfo, -1) !== '/') {
-                    return $this->redirect($pathinfo.'/', 'locazik_annonce_detail');
+            if (0 === strpos($pathinfo, '/annonce/detail')) {
+                // locazik_annonce_detail
+                if (preg_match('#^/annonce/detail/(?P<id>\\d+)/?$#s', $pathinfo, $matches)) {
+                    if (substr($pathinfo, -1) !== '/') {
+                        return $this->redirect($pathinfo.'/', 'locazik_annonce_detail');
+                    }
+
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_annonce_detail')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::detailAnnonceAction',));
                 }
 
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_annonce_detail')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::detailAnnonceAction',));
+                // locazik_annonce_detailGetNumeroTel
+                if (0 === strpos($pathinfo, '/annonce/detail/getNumTel') && preg_match('#^/annonce/detail/getNumTel/(?P<annonceKey>[^/]++)$#s', $pathinfo, $matches)) {
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_annonce_detailGetNumeroTel')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::ajaxGetNumeroTelAnnonceAction',));
+                }
+
             }
 
-            // locazik_annonce_listerRegion
-            if (0 === strpos($pathinfo, '/annonces') && preg_match('#^/annonces/(?P<nomRegion>[^/]++)/?$#s', $pathinfo, $matches)) {
-                if (substr($pathinfo, -1) !== '/') {
-                    return $this->redirect($pathinfo.'/', 'locazik_annonce_listerRegion');
-                }
-
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_annonce_listerRegion')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::listerAnnonceParRegionAction',));
+            // locazik_annonce_listerFiltre
+            if (0 === strpos($pathinfo, '/annonces') && preg_match('#^/annonces(?:/(?P<categorieUrlName>[^/]++)(?:/(?P<regionUrlName>[a-zA-Z0-9-]*)(?:/(?P<depUrlName>[a-zA-Z0-9-]*)(?:/(?P<villeUrlName>[a-zA-Z0-9-]*))?)?)?)?$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_annonce_listerFiltre')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceController::listerAnnonceAction',  'categorieUrlName' => 'toutes',  'regionUrlName' => NULL,  'depUrlName' => NULL,  'villeUrlName' => NULL,));
             }
 
         }
@@ -297,13 +301,37 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
-        // locazik_geo_listedepfromregion
-        if (rtrim($pathinfo, '/') === '/geo/listedepfromregion') {
-            if (substr($pathinfo, -1) !== '/') {
-                return $this->redirect($pathinfo.'/', 'locazik_geo_listedepfromregion');
+        if (0 === strpos($pathinfo, '/ge')) {
+            if (0 === strpos($pathinfo, '/geo/liste')) {
+                // locazik_geo_listedepfromregion
+                if (rtrim($pathinfo, '/') === '/geo/listedepfromregion') {
+                    if (substr($pathinfo, -1) !== '/') {
+                        return $this->redirect($pathinfo.'/', 'locazik_geo_listedepfromregion');
+                    }
+
+                    return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\GeoController::ajaxListeDepFromRegionAction',  '_route' => 'locazik_geo_listedepfromregion',);
+                }
+
+                // locazik_geo_listevilles
+                if (0 === strpos($pathinfo, '/geo/listeVilles') && preg_match('#^/geo/listeVilles/(?P<finder>[^/]++)$#s', $pathinfo, $matches)) {
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_geo_listevilles')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\GeoController::ajaxListeCpVilleAction',));
+                }
+
             }
 
-            return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\GeoController::ajaxListeDepFromRegionAction',  '_route' => 'locazik_geo_listedepfromregion',);
+            if (0 === strpos($pathinfo, '/genere')) {
+                // genereDepUrl
+                if ($pathinfo === '/genereDepUrl') {
+                    return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\GeoController::genereDepUrlAction',  '_route' => 'genereDepUrl',);
+                }
+
+                // genereVilleUrl
+                if ($pathinfo === '/genereVilleUrl') {
+                    return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\GeoController::genereVilleUrlAction',  '_route' => 'genereVilleUrl',);
+                }
+
+            }
+
         }
 
         if (0 === strpos($pathinfo, '/log')) {

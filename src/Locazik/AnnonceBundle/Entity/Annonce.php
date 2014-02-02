@@ -42,6 +42,12 @@ class Annonce
     private $departement;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Locazik\AnnonceBundle\Entity\Ville", inversedBy="annonces")
+     * @ORM\JoinColumn(nullable=false)
+    */
+    private $ville;
+    
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -74,9 +80,23 @@ class Annonce
     /**
      * @var string
      *
-     * @ORM\Column(name="AnnonceCp", type="string", length=5)
+     * @ORM\Column(name="AnnonceCpWorkField", type="string", length=80)
      */
-    private $annonceCp;
+    private $annonceCpWorkField;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="NumeroTel", type="string", length=14)
+     */
+    private $numeroTel;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="AnnonceKey", type="string", length=100)
+     */
+    private $annonceKey;
 
     /**
      * @var boolean
@@ -105,6 +125,7 @@ class Annonce
         $this->dateCreation = new \Datetime();
         $this->dateUpdate = new \Datetime();
         $this->isOnline = false;
+        $this->annonceKey = sha1(uniqid(mt_rand(), true));
     }
 
 
@@ -185,29 +206,6 @@ class Annonce
     public function getAnnoncePrix()
     {
         return $this->annoncePrix;
-    }
-
-    /**
-     * Set annonceCp
-     *
-     * @param string $annonceCp
-     * @return Annonce
-     */
-    public function setAnnonceCp($annonceCp)
-    {
-        $this->annonceCp = $annonceCp;
-
-        return $this;
-    }
-
-    /**
-     * Get annonceCp
-     *
-     * @return string 
-     */
-    public function getAnnonceCp()
-    {
-        return $this->annonceCp;
     }
 
     /**
@@ -404,5 +402,97 @@ class Annonce
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set numeroTel
+     *
+     * @param string $numeroTel
+     * @return Annonce
+     */
+    public function setNumeroTel($numeroTel)
+    {
+        $this->numeroTel = $numeroTel;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroTel
+     *
+     * @return string 
+     */
+    public function getNumeroTel()
+    {
+        return $this->numeroTel;
+    }
+
+    /**
+     * Set annonceKey
+     *
+     * @param string $annonceKey
+     * @return Annonce
+     */
+    public function setAnnonceKey($annonceKey)
+    {
+        $this->annonceKey = $annonceKey;
+
+        return $this;
+    }
+
+    /**
+     * Get annonceKey
+     *
+     * @return string 
+     */
+    public function getAnnonceKey()
+    {
+        return $this->annonceKey;
+    }
+
+    /**
+     * Set annonceCpWorkField
+     *
+     * @param string $annonceCpWorkField
+     * @return Annonce
+     */
+    public function setAnnonceCpWorkField($annonceCpWorkField)
+    {
+        $this->annonceCpWorkField = $annonceCpWorkField;
+
+        return $this;
+    }
+
+    /**
+     * Get annonceCpWorkField
+     *
+     * @return string 
+     */
+    public function getAnnonceCpWorkField()
+    {
+        return $this->annonceCpWorkField;
+    }
+
+    /**
+     * Set ville
+     *
+     * @param \Locazik\AnnonceBundle\Entity\Ville $ville
+     * @return Annonce
+     */
+    public function setVille(\Locazik\AnnonceBundle\Entity\Ville $ville)
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    /**
+     * Get ville
+     *
+     * @return \Locazik\AnnonceBundle\Entity\Ville 
+     */
+    public function getVille()
+    {
+        return $this->ville;
     }
 }

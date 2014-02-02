@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Ville
  *
  * @ORM\Table(name="ville")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Locazik\AnnonceBundle\Entity\Repository\GeoRepository")
  */
 class Ville
 {
@@ -26,6 +26,11 @@ class Ville
      * @ORM\JoinColumn(nullable=false)
      */
     private $departement;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Locazik\AnnonceBundle\Entity\Annonce", mappedBy="departement")
+     */
+    private $annonces;
 
     /**
      * @var string
@@ -33,6 +38,13 @@ class Ville
      * @ORM\Column(name="nom", type="string", length=250, nullable=false)
      */
     private $nom;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="villeurl", type="string", length=80)
+     */
+    private $villeurl;
 
     /**
      * @var string
@@ -157,5 +169,91 @@ class Ville
     public function getLon()
     {
         return $this->lon;
+    }
+
+    /**
+     * Set villeurl
+     *
+     * @param string $villeurl
+     * @return Ville
+     */
+    public function setVilleurl($villeurl)
+    {
+        $this->villeurl = $villeurl;
+
+        return $this;
+    }
+
+    /**
+     * Get villeurl
+     *
+     * @return string 
+     */
+    public function getVilleurl()
+    {
+        return $this->villeurl;
+    }
+
+    /**
+     * Set departement
+     *
+     * @param \Locazik\AnnonceBundle\Entity\Departement $departement
+     * @return Ville
+     */
+    public function setDepartement(\Locazik\AnnonceBundle\Entity\Departement $departement)
+    {
+        $this->departement = $departement;
+
+        return $this;
+    }
+
+    /**
+     * Get departement
+     *
+     * @return \Locazik\AnnonceBundle\Entity\Departement 
+     */
+    public function getDepartement()
+    {
+        return $this->departement;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->annonces = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add annonces
+     *
+     * @param \Locazik\AnnonceBundle\Entity\Annonce $annonces
+     * @return Ville
+     */
+    public function addAnnonce(\Locazik\AnnonceBundle\Entity\Annonce $annonces)
+    {
+        $this->annonces[] = $annonces;
+
+        return $this;
+    }
+
+    /**
+     * Remove annonces
+     *
+     * @param \Locazik\AnnonceBundle\Entity\Annonce $annonces
+     */
+    public function removeAnnonce(\Locazik\AnnonceBundle\Entity\Annonce $annonces)
+    {
+        $this->annonces->removeElement($annonces);
+    }
+
+    /**
+     * Get annonces
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAnnonces()
+    {
+        return $this->annonces;
     }
 }

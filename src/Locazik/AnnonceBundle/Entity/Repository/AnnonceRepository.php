@@ -11,7 +11,7 @@ use Doctrine\ORM\Query\ResultSetMapping;
  */
 class AnnonceRepository extends EntityRepository
 {
-    public function listeAnnonceOnline($data = null, $date = 'DESC', $prix = null)
+    public function listeAnnonceOnline($data = null, $categorie = null, $keyword = null, $orderBy = null)
     {
         $queryBuilder = $this->_em->createQueryBuilder();
         
@@ -35,24 +35,34 @@ class AnnonceRepository extends EntityRepository
                 $qb->andWhere('a.departement = :departementId');
                 $qb->setParameter('departementId', $data['departement']);
             }
-            if(!empty($data['cp']))
+            if(!empty($data['ville']))
             {
-                $qb->andWhere('a.annonceCp = :cp');
-                $qb->setParameter('cp', $data['cp']);
+                $qb->andWhere('a.ville = :villeId');
+                $qb->setParameter('villeId', $data['ville']);
             }
-            if($date !== 'DESC')
+            if($orderBy && $orderBy === 'date')
             {
-                $qb->orderBy('a.dateCreation', 'ASC');
+                $qb->orderBy('a.dateCreation', 'DESC');
             }
-            if($prix)
+            if($orderBy && $orderBy === 'prix')
             {
                 $qb->orderBy('a.annoncePrix', 'ASC');
             }
         }
         
+        if($categorie)
+        {
+            $qb->andWhere('a.categorie = :categorieId');
+            $qb->setParameter('categorieId', $categorie->getId());
+        }
         
-        $listeAnnonces = $qb->getQuery()
-                            ->getResult();
+        if($keyword)
+        {
+            $qb->andWhere('a.annonceName like :keyword OR a.annonceDesc like :keyword');
+            $qb->setParameter('keyword', '%'.$keyword.'%');
+        }
+        
+        $listeAnnonces = $qb->getQuery();
         
         return $listeAnnonces;
     }

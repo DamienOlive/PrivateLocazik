@@ -22,10 +22,16 @@ class UserRegistrationType extends BaseType
               'property' => 'libelle',
               'empty_data'  => null,
               'empty_value' => "Choisir",
-              'label' => 'Vous êtes ',
-              'required' => false));
+              'label' => 'Vous êtes '));
     }
 
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'validation_groups' => array('Registration')
+        ));
+    }
+    
     /**
      * @return string
      */

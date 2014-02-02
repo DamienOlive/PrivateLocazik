@@ -3,7 +3,13 @@
 {% block title %}{{ parent() }} - Détail Annonce{% endblock %}
 
 {% block body %}
+
+<input type="hidden" id="annonceKey" value="{{ annonce.annonceKey }}" />
+
 Détail : <br />
+
+Contacter l'annonceur : <div id="affNumTelAnnonce">Cliquez pour voir le numéro de téléphone</div>
+
 <a href="{{ path('locazik_categorie_modifier', { 'id': annonce.id }) }}">{{ annonce.annonceName }}</a><br />
 <strong>Description :</strong> <br /> {{ annonce.annonceDesc }}<br />
 <strong>Prix à la journée : </strong> {{ annonce.annoncePrix }}€ <br />

@@ -49,30 +49,36 @@ locazik_annonce_supprimer:
 # PERMET la connexion/inscription avant de valider l'ajout d'une annonce
 #
 #locazik_user_login_before_confirm:
-#    pattern:  /annonce/identification/{idAnnonce}/
+#    pattern:  /annonce/identification/{annonceKey}/
 #    defaults: { _controller: LocazikUserBundle:User:identificationConfirmAnnonce }
-#    requirements:
-#        idAnnonce:  \d+
     
 locazik_annonce_confirmer:
     pattern:  /annonce/confirmer/
     defaults: { _controller: LocazikAnnonceBundle:Annonce:confirmerCreationAnnonce }
   
+#A deplacer dans l'administration !!!
 locazik_annonce_lister:
     pattern:  /annonce/lister/
-    defaults: { _controller: LocazikAnnonceBundle:Annonce:listerAnnonce }   
+    defaults: { _controller: LocazikAnnonceBundle:Annonce:listerAnnonceAdmin }   
  
 locazik_annonce_detail:
     pattern:  /annonce/detail/{id}/
     defaults: { _controller: LocazikAnnonceBundle:Annonce:detailAnnonce }
     requirements:
         id:  \d+
-    
-locazik_annonce_listerRegion:
-    pattern:  /annonces/{nomRegion}/
-    defaults: { _controller: LocazikAnnonceBundle:Annonce:listerAnnonceParRegion }
-    
-    
+        
+# Requete ajax -> permet de récupérer le numéro de téléphone de l'annonce
+locazik_annonce_detailGetNumeroTel:
+    pattern:  /annonce/detail/getNumTel/{annonceKey}
+    defaults: { _controller: LocazikAnnonceBundle:Annonce:ajaxGetNumeroTelAnnonce }
+   
+locazik_annonce_listerFiltre:
+    pattern:  /annonces/{categorieUrlName}/{regionUrlName}/{depUrlName}/{villeUrlName}
+    defaults: { _controller: LocazikAnnonceBundle:Annonce:listerAnnonce, categorieUrlName: toutes, regionUrlName: null, depUrlName: null, villeUrlName: null }
+    requirements:
+        regionUrlName: "[a-zA-Z0-9-]*"
+        depUrlName: "[a-zA-Z0-9-]*"
+        villeUrlName: "[a-zA-Z0-9-]*"    
     
 locazik_mot_creer:
     pattern:  /mot-interdit/creer/
@@ -92,3 +98,25 @@ locazik_mot_supprimer:
 locazik_geo_listedepfromregion:
     pattern:  /geo/listedepfromregion/
     defaults: { _controller: LocazikAnnonceBundle:Geo:ajaxListeDepFromRegion }  
+
+locazik_geo_listevilles:
+    pattern:  /geo/listeVilles/{finder}
+    defaults: { _controller: LocazikAnnonceBundle:Geo:ajaxListeCpVille }
+    
+    
+    
+    
+    
+    
+    
+#########################################################################
+#                      GENERATION CHAMPS URL                            #
+#########################################################################
+
+genereDepUrl:
+    pattern:  /genereDepUrl
+    defaults: { _controller: LocazikAnnonceBundle:Geo:genereDepUrl }
+    
+genereVilleUrl:
+    pattern:  /genereVilleUrl
+    defaults: { _controller: LocazikAnnonceBundle:Geo:genereVilleUrl }

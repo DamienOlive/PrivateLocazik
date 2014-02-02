@@ -3,7 +3,7 @@
     {% set jsRegion = region.getJsregion() %}
     <a id="liste_{{ jsRegion }}" onmouseover="hoverRegion(this, '{{ jsRegion }}')" 
        onmouseout="outRegion(this, '{{ jsRegion }}')"
-       href="{{ path('locazik_annonce_listerRegion', { 'nomRegion': region.getUrlregion() }) }}">
+       href="{{ path('locazik_annonce_listerFiltre', { 'regionUrlName': region.getUrlregion() }) }}">
         {{ region.nomRegion }}
     </a><br />
 {% endfor %}

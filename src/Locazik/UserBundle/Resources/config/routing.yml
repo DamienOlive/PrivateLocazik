@@ -1,6 +1,4 @@
     
 locazik_user_login_before_confirm:
-    pattern:  /annonce/identification/{idAnnonce}/
+    pattern:  /annonce/identification/{annonceKey}/
     defaults: { _controller: LocazikUserBundle:User:identificationConfirmAnnonce }
-    requirements:
-        idAnnonce:  \d+
