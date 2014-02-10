@@ -1,0 +1,60 @@
+{# src/Locazik/AnnonceBundle/Resources/views/Annonce/validationAdmin.html.twig #}
+
+{% extends "::baseAdmin.html.twig" %}
+
+{% block breadcrumb %}
+<li><a href="{{ path('locazik_admin') }}"><i class="icon-dashboard"></i> Dashboard</a> / 
+    <a href="{{ path('locazik_admin_annonce_lister') }}"> Gestion annonces</a> /
+    <a href="{{ path('locazik_admin_annonce_modifier', {id: annonce.id}) }}"> Modifier annonce</a>
+</li>
+{% endblock %}
+
+{% block body %}
+<div class="well">
+
+    {# Les erreurs générales du formulaire. #}
+    {{ form_errors(form) }}
+    <form method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        {% for image in annonce.getImageAnnonces() %}
+            {% set imageLink = image.getUploadDir()~image.getImageName() %}
+            <div id="imageAnnonce_{{image.id}}" class="imageAnnonceValidation">
+                <img src="{{ imageLink | imagine_filter('detail_annonce') }}" /><br />
+                <div onclick="supprimerImageConfirm({{image.id}})" class="supprimerImage">Supprimer</div>
+            </div>
+        {% endfor %}
+        <div class="clear"></div>
+        <br />
+        <input type="submit" class="btn btn-primary" />
+    </form>
+
+</div>
+
+<script type="text/javascript">
+    var supprimerImageConfirm = function(id) {
+        BootstrapDialog.show({
+            type: BootstrapDialog.TYPE_DANGER,
+            title: 'Confirmation',
+            message: 'Etes-vous sur de vouloir supprimer l\'image ?',
+            buttons: [{
+                    label: 'Annuler',
+                    action: function(dialogRef) {
+                        dialogRef.close();
+                    }
+                }, {
+                    cssClass: 'btn-danger',
+                    label: 'Confirmer',
+                    action: function(dialogRef) {
+                        removeImageAnnonce(id);
+                        dialogRef.close();
+                    }
+                }]
+        });
+    }
+
+    var removeImageAnnonce = function(id) {
+        $.post("{{ path('locazik_admin_annonce_ajax_supprimer_image') }}", {id: id});
+        $('#imageAnnonce_' + id).slideUp();
+    }
+</script>
+{% endblock %}

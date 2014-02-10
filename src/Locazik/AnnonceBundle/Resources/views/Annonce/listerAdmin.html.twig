@@ -1,0 +1,137 @@
+{% extends "::baseAdmin.html.twig" %}
+
+{% block breadcrumb %}
+    <li><a href="{{ path('locazik_admin') }}"><i class="icon-dashboard"></i> Dashboard</a> / 
+        <a href="{{ path('locazik_admin_annonce_lister') }}"> Gestion annonces</a>
+    </li>
+{% endblock %}
+    
+                            
+    
+{% block body %}
+
+<h2>Gestion des annonces</h2>
+    
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Id - Nom</th>
+            <th>Dernière modification</th>
+            <th>Catégorie</th>
+            <th>Prix</th>
+            <th>Photos</th>
+            <th>Online/Offline</th>
+            <th>Editer/Supprimer</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for annonce in listeAnnonces %}
+    <tr id="{{ 'line_'~annonce.id }}">
+        <td>
+            <a href="{{ path('locazik_admin_annonce_modifier', { 'id': annonce.id }) }}">
+                {{ annonce.id~' - '~annonce.annonceName|e }}
+            </a> <br />
+            <span title="{{ annonce.annonceDesc }}" class="pointer"><i>Passer la souris ci-dessus pour voir le texte</i></span>
+        </td>
+        <td>
+            {{ annonce.dateUpdate|date('d-m-Y') }}
+        </td>
+        <td>
+            {{ annonce.categorie.getCategorieName() }}
+        </td>
+        <td>
+            {{ annonce.annoncePrix }}€/jour
+        </td>
+        <td>
+            {% for image in annonce.getImageAnnonces() %}
+                {% set imageLink = image.getUploadDir()~image.getImageName() %}
+                <img src="{{ imageLink | imagine_filter('admin_liste_annonce') }}" />
+            {% endfor %}
+            <small>{{ annonce.getImageAnnonces().count }} photo(s)</small>
+        </td>
+        <td>
+            {% if annonce.isOnline == true %}
+                <span id="{{ 'onlineStatus_'~annonce.id }}" onclick="updateOnlineStatusConfirm({{annonce.id}});" 
+                      class="label label-success pointer">Online</span>
+            {% else %}
+                <span id="{{ 'onlineStatus_'~annonce.id }}" onclick="updateOnlineStatusConfirm({{annonce.id}});" 
+                      class="label label-danger pointer">Offline</span>
+            {% endif %} 
+        </td>
+        <td>
+            <a href="{{path('locazik_admin_annonce_modifier', {id: annonce.id}) }}" class="btn btn-info btn-default">Editer <i class="icon-pencil"></i></a>
+            <input type="button" value="Supprimer" onclick="removeAnnonceConfirm({{annonce.id}});" class="btn btn-danger btn-default remove_fields" />
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<br />
+
+<script type="text/javascript">
+    var removeAnnonceConfirm = function(id) {
+        BootstrapDialog.show({
+            type: BootstrapDialog.TYPE_DANGER,
+            title: 'Confirmation',
+            message: 'Etes-vous sur de vouloir supprimer l\'enregistrement ?',
+            buttons: [{
+                label: 'Annuler',
+                action: function(dialogRef){    
+                    dialogRef.close();
+                }
+            }, {
+                cssClass: 'btn-danger',
+                label: 'Confirmer',
+                action: function(dialogRef){    
+                    removeAnnonce(id);
+                    dialogRef.close();
+                }
+            }]
+        }); 
+    }
+    
+    var removeAnnonce = function (id) {
+        $.post( "{{ path('locazik_admin_annonce_ajax_supprimer') }}", { id: id } );
+        $('#line_'+id).slideUp();
+        $('.lineChild_'+id).slideUp();
+    }
+    
+    var updateOnlineStatusConfirm = function(id) {
+        BootstrapDialog.show({
+            type: BootstrapDialog.TYPE_DANGER,
+            title: 'Confirmation',
+            message: 'Etes-vous sur de vouloir modifier le status (online/offline) de l\'enregistrement ?',
+            buttons: [{
+                label: 'Annuler',
+                action: function(dialogRef){    
+                    dialogRef.close();
+                }
+            }, {
+                cssClass: 'btn-danger',
+                label: 'Confirmer',
+                action: function(dialogRef){    
+                    updateOnlineStatus(id);
+                    dialogRef.close();
+                }
+            }]
+        }); 
+    }
+    
+    var updateOnlineStatus = function (id) {
+        var online = true;
+        if($('#onlineStatus_'+id).hasClass('label-success')){
+            online = false;
+            $('#onlineStatus_'+id).removeClass('label-success').addClass('label-danger');
+            $('#onlineStatus_'+id).html('Offline');
+        }else{
+            $('#onlineStatus_'+id).removeClass('label-danger').addClass('label-success');
+            $('#onlineStatus_'+id).html('Online');
+        }
+        $.post( "{{ path('locazik_admin_annonce_ajax_updateonlinevalue') }}", { id: id, isOnline: online });
+        {% if offlinePage is defined %}
+            $('#line_'+id).slideUp();
+        {% endif %}
+    }
+</script>
+
+{% endblock %}

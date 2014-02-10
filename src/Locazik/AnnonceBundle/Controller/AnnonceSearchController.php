@@ -11,7 +11,7 @@ class AnnonceSearchController extends Controller
     public function searchBarAction($data, $region, $nbAnnonces)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $listeCategories = $this->get('categorie_service')->listerCategorieService($entityManager);
+        $listeCategories = $this->get('categorie_manager')->findListeCategorieOnline();
         
         $form = $this->createForm(new AnnonceSearchType($entityManager, $listeCategories));
 

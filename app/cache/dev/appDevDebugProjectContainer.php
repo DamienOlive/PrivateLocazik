@@ -32,7 +32,7 @@ class appDevDebugProjectContainer extends Container
         $this->scopes = array('request' => 'container');
         $this->scopeChildren = array('request' => array());
         $this->methodMap = array(
-            'annonce_service' => 'getAnnonceServiceService',
+            'annonce_manager' => 'getAnnonceManagerService',
             'annotation_reader' => 'getAnnotationReaderService',
             'assetic.asset_factory' => 'getAssetic_AssetFactoryService',
             'assetic.asset_manager' => 'getAssetic_AssetManagerService',
@@ -44,7 +44,7 @@ class appDevDebugProjectContainer extends Container
             'assetic.value_supplier.default' => 'getAssetic_ValueSupplier_DefaultService',
             'cache_clearer' => 'getCacheClearerService',
             'cache_warmer' => 'getCacheWarmerService',
-            'categorie_service' => 'getCategorieServiceService',
+            'categorie_manager' => 'getCategorieManagerService',
             'controller_name_converter' => 'getControllerNameConverterService',
             'data_collector.form' => 'getDataCollector_FormService',
             'data_collector.form.extractor' => 'getDataCollector_Form_ExtractorService',
@@ -136,6 +136,7 @@ class appDevDebugProjectContainer extends Container
             'fragment.renderer.inline' => 'getFragment_Renderer_InlineService',
             'geo_service' => 'getGeoServiceService',
             'http_kernel' => 'getHttpKernelService',
+            'image_annonce_manager' => 'getImageAnnonceManagerService',
             'kernel' => 'getKernelService',
             'knp_paginator' => 'getKnpPaginatorService',
             'knp_paginator.helper.processor' => 'getKnpPaginator_Helper_ProcessorService',
@@ -184,6 +185,7 @@ class appDevDebugProjectContainer extends Container
             'monolog.logger.router' => 'getMonolog_Logger_RouterService',
             'monolog.logger.security' => 'getMonolog_Logger_SecurityService',
             'monolog.logger.templating' => 'getMonolog_Logger_TemplatingService',
+            'mot_interdit_manager' => 'getMotInterditManagerService',
             'profiler' => 'getProfilerService',
             'profiler_listener' => 'getProfilerListenerService',
             'property_accessor' => 'getPropertyAccessorService',
@@ -286,6 +288,7 @@ class appDevDebugProjectContainer extends Container
             'twig.translation.extractor' => 'getTwig_Translation_ExtractorService',
             'uri_signer' => 'getUriSignerService',
             'urlify_helper' => 'getUrlifyHelperService',
+            'user_manager' => 'getUserManagerService',
             'validator' => 'getValidatorService',
             'validator.expression' => 'getValidator_ExpressionService',
             'validator.mapping.class_metadata_factory' => 'getValidator_Mapping_ClassMetadataFactoryService',
@@ -313,16 +316,16 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
-     * Gets the 'annonce_service' service.
+     * Gets the 'annonce_manager' service.
      *
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Locazik\AnnonceBundle\Controller\AnnonceController A Locazik\AnnonceBundle\Controller\AnnonceController instance.
+     * @return Locazik\AnnonceBundle\Manager\AnnonceManager A Locazik\AnnonceBundle\Manager\AnnonceManager instance.
      */
-    protected function getAnnonceServiceService()
+    protected function getAnnonceManagerService()
     {
-        return $this->services['annonce_service'] = new \Locazik\AnnonceBundle\Controller\AnnonceController();
+        return $this->services['annonce_manager'] = new \Locazik\AnnonceBundle\Manager\AnnonceManager($this->get('doctrine.orm.default_entity_manager'));
     }
 
     /**
@@ -442,16 +445,16 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
-     * Gets the 'categorie_service' service.
+     * Gets the 'categorie_manager' service.
      *
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return Locazik\AnnonceBundle\Controller\CategorieController A Locazik\AnnonceBundle\Controller\CategorieController instance.
+     * @return Locazik\AnnonceBundle\Manager\CategorieManager A Locazik\AnnonceBundle\Manager\CategorieManager instance.
      */
-    protected function getCategorieServiceService()
+    protected function getCategorieManagerService()
     {
-        return $this->services['categorie_service'] = new \Locazik\AnnonceBundle\Controller\CategorieController();
+        return $this->services['categorie_manager'] = new \Locazik\AnnonceBundle\Manager\CategorieManager($this->get('doctrine.orm.default_entity_manager'));
     }
 
     /**
@@ -1708,6 +1711,19 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'image_annonce_manager' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Locazik\AnnonceBundle\Manager\ImageAnnonceManager A Locazik\AnnonceBundle\Manager\ImageAnnonceManager instance.
+     */
+    protected function getImageAnnonceManagerService()
+    {
+        return $this->services['image_annonce_manager'] = new \Locazik\AnnonceBundle\Manager\ImageAnnonceManager($this->get('doctrine.orm.default_entity_manager'));
+    }
+
+    /**
      * Gets the 'kernel' service.
      *
      * This service is shared.
@@ -1956,7 +1972,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getLiipImagine_Filter_ConfigurationService()
     {
-        return $this->services['liip_imagine.filter.configuration'] = new \Liip\ImagineBundle\Imagine\Filter\FilterConfiguration(array('liste_annonce' => array('filters' => array('relative_resize' => array('widen' => 160)), 'quality' => 100, 'format' => NULL, 'cache' => NULL, 'data_loader' => NULL, 'controller_action' => NULL, 'route' => array())));
+        return $this->services['liip_imagine.filter.configuration'] = new \Liip\ImagineBundle\Imagine\Filter\FilterConfiguration(array('liste_annonce' => array('filters' => array('relative_resize' => array('widen' => 160)), 'quality' => 100, 'format' => NULL, 'cache' => NULL, 'data_loader' => NULL, 'controller_action' => NULL, 'route' => array()), 'detail_annonce' => array('filters' => array('relative_resize' => array('widen' => 300)), 'quality' => 100, 'format' => NULL, 'cache' => NULL, 'data_loader' => NULL, 'controller_action' => NULL, 'route' => array()), 'admin_liste_annonce' => array('filters' => array('relative_resize' => array('heighten' => 50)), 'quality' => 100, 'format' => NULL, 'cache' => NULL, 'data_loader' => NULL, 'controller_action' => NULL, 'route' => array())));
     }
 
     /**
@@ -2138,7 +2154,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getLiipImagine_Routing_LoaderService()
     {
-        return $this->services['liip_imagine.routing.loader'] = new \Liip\ImagineBundle\Routing\ImagineLoader('liip_imagine.controller:filterAction', '/media/cache', array('liste_annonce' => array('filters' => array('relative_resize' => array('widen' => 160)), 'quality' => 100, 'format' => NULL, 'cache' => NULL, 'data_loader' => NULL, 'controller_action' => NULL, 'route' => array())));
+        return $this->services['liip_imagine.routing.loader'] = new \Liip\ImagineBundle\Routing\ImagineLoader('liip_imagine.controller:filterAction', '/media/cache', array('liste_annonce' => array('filters' => array('relative_resize' => array('widen' => 160)), 'quality' => 100, 'format' => NULL, 'cache' => NULL, 'data_loader' => NULL, 'controller_action' => NULL, 'route' => array()), 'detail_annonce' => array('filters' => array('relative_resize' => array('widen' => 300)), 'quality' => 100, 'format' => NULL, 'cache' => NULL, 'data_loader' => NULL, 'controller_action' => NULL, 'route' => array()), 'admin_liste_annonce' => array('filters' => array('relative_resize' => array('heighten' => 50)), 'quality' => 100, 'format' => NULL, 'cache' => NULL, 'data_loader' => NULL, 'controller_action' => NULL, 'route' => array())));
     }
 
     /**
@@ -2423,6 +2439,19 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'mot_interdit_manager' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Locazik\AnnonceBundle\Manager\MotInterditManager A Locazik\AnnonceBundle\Manager\MotInterditManager instance.
+     */
+    protected function getMotInterditManagerService()
+    {
+        return $this->services['mot_interdit_manager'] = new \Locazik\AnnonceBundle\Manager\MotInterditManager($this->get('doctrine.orm.default_entity_manager'));
+    }
+
+    /**
      * Gets the 'profiler' service.
      *
      * This service is shared.
@@ -2668,24 +2697,30 @@ class appDevDebugProjectContainer extends Container
         $f = $this->get('security.authentication.manager');
         $g = $this->get('locazik_user_login_handler');
 
-        $h = new \Symfony\Component\Security\Http\AccessMap();
+        $h = new \Symfony\Component\HttpFoundation\RequestMatcher('^/agrume');
 
-        $i = new \Symfony\Component\Security\Core\User\InMemoryUserProvider();
-        $i->createUser(new \Symfony\Component\Security\Core\User\User('user', 'userpass', array(0 => 'ROLE_USER')));
-        $i->createUser(new \Symfony\Component\Security\Core\User\User('admin', 'adminpass', array(0 => 'ROLE_ADMIN')));
+        $i = new \Symfony\Component\HttpFoundation\RequestMatcher('^/compte');
 
-        $j = new \Symfony\Component\Security\Http\HttpUtils($e, $e);
+        $j = new \Symfony\Component\Security\Http\AccessMap();
+        $j->add($h, array(0 => 'ROLE_ADMIN'), NULL);
+        $j->add($i, array(0 => 'ROLE_USER'), NULL);
 
-        $k = new \Symfony\Component\Security\Http\RememberMe\TokenBasedRememberMeServices(array(0 => $c), 'ThisTokenIsNotSoSecretChangeIt', 'main', array('name' => 'REMEMBERME', 'lifetime' => 31536000, 'path' => '/', 'domain' => NULL, 'secure' => false, 'httponly' => true, 'always_remember_me' => false, 'remember_me_parameter' => '_remember_me'), $a);
+        $k = new \Symfony\Component\Security\Core\User\InMemoryUserProvider();
+        $k->createUser(new \Symfony\Component\Security\Core\User\User('user', 'userpass', array(0 => 'ROLE_USER')));
+        $k->createUser(new \Symfony\Component\Security\Core\User\User('admin', 'adminpass', array(0 => 'ROLE_ADMIN')));
 
-        $l = new \Symfony\Component\Security\Http\Firewall\LogoutListener($b, $j, new \Symfony\Component\Security\Http\Logout\DefaultLogoutSuccessHandler($j, '/'), array('csrf_parameter' => '_csrf_token', 'intention' => 'logout', 'logout_path' => 'fos_user_security_logout'));
-        $l->addHandler(new \Symfony\Component\Security\Http\Logout\SessionLogoutHandler());
-        $l->addHandler($k);
+        $l = new \Symfony\Component\Security\Http\HttpUtils($e, $e);
 
-        $m = new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $f, $this->get('security.authentication.session_strategy'), $j, 'main', $g, $g, array('check_path' => 'fos_user_security_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $a, $d);
-        $m->setRememberMeServices($k);
+        $m = new \Symfony\Component\Security\Http\RememberMe\TokenBasedRememberMeServices(array(0 => $c), 'ThisTokenIsNotSoSecretChangeIt', 'main', array('name' => 'REMEMBERME', 'lifetime' => 31536000, 'path' => '/', 'domain' => NULL, 'secure' => false, 'httponly' => true, 'always_remember_me' => false, 'remember_me_parameter' => '_remember_me'), $a);
 
-        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($h, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => $c, 1 => $i, 2 => $c), 'main', $a, $d), 2 => $l, 3 => $m, 4 => new \Symfony\Component\Security\Http\Firewall\RememberMeListener($b, $k, $f, $a, $d), 5 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '52ee8a8e009c3', $a), 6 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $h, $f)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $j, 'main', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($this->get('http_kernel'), $j, 'fos_user_security_login', false), NULL, NULL, $a));
+        $n = new \Symfony\Component\Security\Http\Firewall\LogoutListener($b, $l, new \Symfony\Component\Security\Http\Logout\DefaultLogoutSuccessHandler($l, '/'), array('csrf_parameter' => '_csrf_token', 'intention' => 'logout', 'logout_path' => 'fos_user_security_logout'));
+        $n->addHandler(new \Symfony\Component\Security\Http\Logout\SessionLogoutHandler());
+        $n->addHandler($m);
+
+        $o = new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $f, $this->get('security.authentication.session_strategy'), $l, 'main', $g, $g, array('check_path' => 'fos_user_security_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $a, $d);
+        $o->setRememberMeServices($m);
+
+        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($j, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => $c, 1 => $k, 2 => $c), 'main', $a, $d), 2 => $n, 3 => $o, 4 => new \Symfony\Component\Security\Http\Firewall\RememberMeListener($b, $m, $f, $a, $d), 5 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '52f8fc64271a9', $a), 6 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $j, $f)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $l, 'main', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($this->get('http_kernel'), $l, 'fos_user_security_login', false), NULL, NULL, $a));
     }
 
     /**
@@ -3985,6 +4020,19 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'user_manager' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Locazik\UserBundle\Manager\UserManager A Locazik\UserBundle\Manager\UserManager instance.
+     */
+    protected function getUserManagerService()
+    {
+        return $this->services['user_manager'] = new \Locazik\UserBundle\Manager\UserManager($this->get('doctrine.orm.default_entity_manager'));
+    }
+
+    /**
      * Gets the 'validator' service.
      *
      * This service is shared.
@@ -4221,7 +4269,7 @@ class appDevDebugProjectContainer extends Container
     {
         $a = $this->get('security.user_checker');
 
-        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('fos_user.user_provider.username_email'), $a, 'main', $this->get('security.encoder_factory'), true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\RememberMeAuthenticationProvider($a, 'ThisTokenIsNotSoSecretChangeIt', 'main'), 2 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('52ee8a8e009c3')), true);
+        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('fos_user.user_provider.username_email'), $a, 'main', $this->get('security.encoder_factory'), true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\RememberMeAuthenticationProvider($a, 'ThisTokenIsNotSoSecretChangeIt', 'main'), 2 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('52f8fc64271a9')), true);
 
         $instance->setEventDispatcher($this->get('debug.event_dispatcher'));
 
@@ -4418,7 +4466,7 @@ class appDevDebugProjectContainer extends Container
             'kernel.root_dir' => 'C:/wamp/www/locazik/app',
             'kernel.environment' => 'dev',
             'kernel.debug' => true,
-            'kernel.name' => 'ap_',
+            'kernel.name' => 'app',
             'kernel.cache_dir' => 'C:/wamp/www/locazik/app/cache/dev',
             'kernel.logs_dir' => 'C:/wamp/www/locazik/app/logs',
             'kernel.bundles' => array(
@@ -5031,6 +5079,36 @@ class appDevDebugProjectContainer extends Container
                     'filters' => array(
                         'relative_resize' => array(
                             'widen' => 160,
+                        ),
+                    ),
+                    'quality' => 100,
+                    'format' => NULL,
+                    'cache' => NULL,
+                    'data_loader' => NULL,
+                    'controller_action' => NULL,
+                    'route' => array(
+
+                    ),
+                ),
+                'detail_annonce' => array(
+                    'filters' => array(
+                        'relative_resize' => array(
+                            'widen' => 300,
+                        ),
+                    ),
+                    'quality' => 100,
+                    'format' => NULL,
+                    'cache' => NULL,
+                    'data_loader' => NULL,
+                    'controller_action' => NULL,
+                    'route' => array(
+
+                    ),
+                ),
+                'admin_liste_annonce' => array(
+                    'filters' => array(
+                        'relative_resize' => array(
+                            'heighten' => 50,
                         ),
                     ),
                     'quality' => 100,

@@ -17,7 +17,7 @@
     <body>
         <div class="container">
             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-            Connecté en tant que <a href="{{ path('fos_user_profile_show') }}">{{ app.user.username }}</a> - 
+            Bonjour <a href="{{ path('fos_user_profile_show') }}">{{ app.user.username }}</a> - 
             <a href="{{ path('fos_user_security_logout') }}">Déconnexion</a>
             {% else %}
             <a href="{{ path('fos_user_security_login') }}">Connexion</a> | 
@@ -32,16 +32,13 @@
 
             <div class="row">
                 <div id="menu" class="span3">
-                    <h3>Principaux Liens</h3>
-                    <a href="{{ path('locazik_annonce_lister') }}">Annonce</a> - 
-                    <a href="{{ path('locazik_categorie_lister') }}">Catégorie</a> - 
-                    <a href="{{ path('locazik_mot_lister') }}">Mot Interdits</a>
+                    <a href="{{ path('locazik_annonce_creer') }}">Créer une annonce
+                                <span class="glyphicon glyphicon-pencil"></span></a>
                     <hr>
-          {#{ render(controller("SdzBlogBundle:Blog:menu", {'nombre': 3})) }#}
                 </div>
                 <div id="content" class="span9">
-          {% block body %}
-          {% endblock %}
+                    {% block body %}
+                    {% endblock %}
                 </div>
             </div>
 

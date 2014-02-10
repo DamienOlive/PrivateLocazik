@@ -28,13 +28,12 @@ class IntToCategorieTransformer implements DataTransformerInterface
      * @param  Issue|null $issue
      * @return string
      */
-    public function transform($issue)
+    public function transform($categorie)
     {
-        if (null === $issue) {
+        if (null === $categorie) {
             return "";
         }
-
-        return $issue->getNumber();
+        return $categorie->getId();
     }
 
     /**

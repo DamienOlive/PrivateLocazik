@@ -1,0 +1,74 @@
+{% extends "::baseAdmin.html.twig" %}
+
+{% block breadcrumb %}
+    <li><a href="{{ path('locazik_admin') }}"><i class="icon-dashboard"></i> Dashboard</a> / 
+        <a href="{{ path('locazik_admin_motinterdit_lister') }}"> Gestion mots interdits</a>
+    </li>
+{% endblock %}
+    
+{% block body %}
+<h2>Gestion des mots interdits</h2>
+
+<br />
+<div class="alert alert-info">
+<p>
+    Pourquoi ajouter un mot interdit ?<br />
+    Le but est d'éviter que les utilisateurs n'insèrent des insultes, 
+    des propos diffamatoires ou incompatible avec la charte du site.<br />
+    Ce filtre permet ainsi de bloquer certaines annonces indésirables.
+</p>
+</div>
+<br />
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Mot interdit</th>
+            <th>Supprimer</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for motInterdit in listeMotsInterdits %}
+        <tr id="{{ 'line_'~motInterdit.id }}">
+            <td>
+                {{ motInterdit.mot|e }}
+            </td>
+            <td>
+                <input type="button" value="Supprimer" onclick="removeMotInterditConfirm({{motInterdit.id}});" class="btn btn-danger btn-default remove_fields" />
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<br />
+<a href="{{path('locazik_admin_motinterdit_creer') }}" class="btn btn-info btn-default">Ajouter un mot interdit <i class="icon-plus"></i></a>
+
+<script type="text/javascript">
+    var removeMotInterditConfirm = function(id) {
+        BootstrapDialog.show({
+            type: BootstrapDialog.TYPE_DANGER,
+            title: 'Confirmation',
+            message: 'Etes-vous sur de vouloir supprimer l\'enregistrement ?',
+            buttons: [{
+                label: 'Annuler',
+                action: function(dialogRef){    
+                    dialogRef.close();
+                }
+            }, {
+                cssClass: 'btn-danger',
+                label: 'Confirmer',
+                action: function(dialogRef){    
+                    removeMotInterdit(id);
+                    dialogRef.close();
+                }
+            }]
+        }); 
+    }
+    
+    var removeMotInterdit = function (id) {
+        $.post( "{{ path('locazik_admin_motinterdit_ajax_supprimer') }}", { id: id } );
+        $('#line_'+id).slideUp();
+    }
+</script>
+
+{% endblock %}

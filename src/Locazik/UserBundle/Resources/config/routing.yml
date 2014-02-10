@@ -5,11 +5,15 @@ locazik_user_login_before_confirm:
     
 fos_user_profile_show:
     pattern:  /
-    defaults: { _controller: FOSUserBundle:Profile:show }
+    defaults: { _controller: LocazikUserBundle:Account:show }
     
 fos_user_profile_edit:
     pattern:  /modifier
-    defaults: { _controller: FOSUserBundle:Profile:edit }
+    defaults: { _controller: LocazikUserBundle:Account:edit }
+    
+locazik_user_annonce_lister:
+    pattern:  /mes-annonces
+    defaults: { _controller: LocazikUserBundle:Account:listerAnnonce }
     
 fos_user_change_password:
     pattern:  /change-password

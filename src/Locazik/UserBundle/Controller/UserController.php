@@ -11,14 +11,12 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 class UserController extends Controller
 {
     public function identificationConfirmAnnonceAction($annonceKey)
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        
+    {        
         // Si l'utilisateur est connecté
         if ($this->container->get('security.context')->isGranted('ROLE_USER'))
         {
             $user = $this->get('security.context')->getToken()->getUser();
-            $result = $this->get('annonce_service')->insertUserAnnonceService($entityManager, $annonceKey, $user);
+            $result = $this->get('annonce_manager')->insertUserAnnonce($annonceKey, $user);
             if($result)
             {
                 return $this->redirect($this->generateUrl('locazik_annonce_confirmer'));

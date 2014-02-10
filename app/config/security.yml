@@ -38,4 +38,5 @@ security:
                 key:        %secret% # %secret% est un paramètre de parameters.yml
 
     access_control:
-        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/agrume, roles: ROLE_ADMIN }
+        - { path: ^/compte, roles: ROLE_USER }

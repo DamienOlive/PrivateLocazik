@@ -2,32 +2,6 @@ locazik_homepage:
     pattern:  /
     defaults: { _controller: LocazikAnnonceBundle:Default:index }
 
-
-locazik_categorie_lister:
-    pattern:  /categorie/lister/
-    defaults: { _controller: LocazikAnnonceBundle:Categorie:listerCategorie }
-    
-locazik_categorie_ajouter:
-    pattern:  /categorie/gerer/
-    defaults: { _controller: LocazikAnnonceBundle:Categorie:gererCategorie }
-    
-locazik_categorie_detail:
-    pattern:  /categorie/detail/{id}/
-    defaults: { _controller: LocazikAnnonceBundle:Categorie:detailCategorie }
-    requirements:
-        id:  \d+
-    
-locazik_categorie_modifier:
-    pattern:  /categorie/gerer/{id}/
-    defaults: { _controller: LocazikAnnonceBundle:Categorie:gererCategorie }
-    requirements:
-        id:  \d+
-    
-locazik_categorie_supprimer:
-    pattern:  /categorie/supprimer/
-    defaults: { _controller: LocazikAnnonceBundle:Categorie:ajaxSupprimerCategorie }  
-    
-    
     
 locazik_annonce_creer:
     pattern:  /annonce/creer/
@@ -79,21 +53,7 @@ locazik_annonce_listerFiltre:
         regionUrlName: "[a-zA-Z0-9-]*"
         depUrlName: "[a-zA-Z0-9-]*"
         villeUrlName: "[a-zA-Z0-9-]*"    
-    
-locazik_mot_creer:
-    pattern:  /mot-interdit/creer/
-    defaults: { _controller: LocazikAnnonceBundle:MotInterdit:creerMot } 
-    
-locazik_mot_lister:
-    pattern:  /mot-interdit/lister/
-    defaults: { _controller: LocazikAnnonceBundle:MotInterdit:listerMot } 
-    
-locazik_mot_supprimer:
-    pattern:  /mot-interdit/supprimer/
-    defaults: { _controller: LocazikAnnonceBundle:MotInterdit:ajaxSupprimerMot } 
-    
-    
-    
+        
 
 locazik_geo_listedepfromregion:
     pattern:  /geo/listedepfromregion/

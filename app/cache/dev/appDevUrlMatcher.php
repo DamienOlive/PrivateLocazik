@@ -144,54 +144,6 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\DefaultController::indexAction',  '_route' => 'locazik_homepage',);
         }
 
-        if (0 === strpos($pathinfo, '/categorie')) {
-            // locazik_categorie_lister
-            if (rtrim($pathinfo, '/') === '/categorie/lister') {
-                if (substr($pathinfo, -1) !== '/') {
-                    return $this->redirect($pathinfo.'/', 'locazik_categorie_lister');
-                }
-
-                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\CategorieController::listerCategorieAction',  '_route' => 'locazik_categorie_lister',);
-            }
-
-            // locazik_categorie_ajouter
-            if (rtrim($pathinfo, '/') === '/categorie/gerer') {
-                if (substr($pathinfo, -1) !== '/') {
-                    return $this->redirect($pathinfo.'/', 'locazik_categorie_ajouter');
-                }
-
-                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\CategorieController::gererCategorieAction',  '_route' => 'locazik_categorie_ajouter',);
-            }
-
-            // locazik_categorie_detail
-            if (0 === strpos($pathinfo, '/categorie/detail') && preg_match('#^/categorie/detail/(?P<id>\\d+)/?$#s', $pathinfo, $matches)) {
-                if (substr($pathinfo, -1) !== '/') {
-                    return $this->redirect($pathinfo.'/', 'locazik_categorie_detail');
-                }
-
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_categorie_detail')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\CategorieController::detailCategorieAction',));
-            }
-
-            // locazik_categorie_modifier
-            if (0 === strpos($pathinfo, '/categorie/gerer') && preg_match('#^/categorie/gerer/(?P<id>\\d+)/?$#s', $pathinfo, $matches)) {
-                if (substr($pathinfo, -1) !== '/') {
-                    return $this->redirect($pathinfo.'/', 'locazik_categorie_modifier');
-                }
-
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_categorie_modifier')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\CategorieController::gererCategorieAction',));
-            }
-
-            // locazik_categorie_supprimer
-            if (rtrim($pathinfo, '/') === '/categorie/supprimer') {
-                if (substr($pathinfo, -1) !== '/') {
-                    return $this->redirect($pathinfo.'/', 'locazik_categorie_supprimer');
-                }
-
-                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\CategorieController::ajaxSupprimerCategorieAction',  '_route' => 'locazik_categorie_supprimer',);
-            }
-
-        }
-
         if (0 === strpos($pathinfo, '/annonce')) {
             // locazik_annonce_creer
             if (rtrim($pathinfo, '/') === '/annonce/creer') {
@@ -262,36 +214,6 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
-        if (0 === strpos($pathinfo, '/mot-interdit')) {
-            // locazik_mot_creer
-            if (rtrim($pathinfo, '/') === '/mot-interdit/creer') {
-                if (substr($pathinfo, -1) !== '/') {
-                    return $this->redirect($pathinfo.'/', 'locazik_mot_creer');
-                }
-
-                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\MotInterditController::creerMotAction',  '_route' => 'locazik_mot_creer',);
-            }
-
-            // locazik_mot_lister
-            if (rtrim($pathinfo, '/') === '/mot-interdit/lister') {
-                if (substr($pathinfo, -1) !== '/') {
-                    return $this->redirect($pathinfo.'/', 'locazik_mot_lister');
-                }
-
-                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\MotInterditController::listerMotAction',  '_route' => 'locazik_mot_lister',);
-            }
-
-            // locazik_mot_supprimer
-            if (rtrim($pathinfo, '/') === '/mot-interdit/supprimer') {
-                if (substr($pathinfo, -1) !== '/') {
-                    return $this->redirect($pathinfo.'/', 'locazik_mot_supprimer');
-                }
-
-                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\MotInterditController::ajaxSupprimerMotAction',  '_route' => 'locazik_mot_supprimer',);
-            }
-
-        }
-
         if (0 === strpos($pathinfo, '/ge')) {
             if (0 === strpos($pathinfo, '/geo/liste')) {
                 // locazik_geo_listedepfromregion
@@ -321,6 +243,142 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                     return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\GeoController::genereVilleUrlAction',  '_route' => 'genereVilleUrl',);
                 }
 
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/agrume')) {
+            // locazik_admin
+            if (rtrim($pathinfo, '/') === '/agrume') {
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'locazik_admin');
+                }
+
+                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AdminController::indexAction',  '_route' => 'locazik_admin',);
+            }
+
+            // locazik_admin_stats
+            if ($pathinfo === '/agrume/statistique') {
+                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AdminController::statistiqueAction',  '_route' => 'locazik_admin_stats',);
+            }
+
+            if (0 === strpos($pathinfo, '/agrume/liste-annonce')) {
+                // locazik_admin_annonce_lister
+                if ($pathinfo === '/agrume/liste-annonce') {
+                    return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceAdminController::listerAnnonceAction',  '_route' => 'locazik_admin_annonce_lister',);
+                }
+
+                // locazik_admin_annonce_lister_offline
+                if ($pathinfo === '/agrume/liste-annonce/offline') {
+                    return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceAdminController::listerAnnonceOfflineAction',  '_route' => 'locazik_admin_annonce_lister_offline',);
+                }
+
+            }
+
+            if (0 === strpos($pathinfo, '/agrume/annonce')) {
+                // locazik_admin_annonce_modifier
+                if (0 === strpos($pathinfo, '/agrume/annonce/modifier') && preg_match('#^/agrume/annonce/modifier/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_admin_annonce_modifier')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceAdminController::modifierAnnonceAction',));
+                }
+
+                // locazik_admin_annonce_ajax_updateonlinevalue
+                if ($pathinfo === '/agrume/annonce/updateonlinestatus') {
+                    return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceAdminController::ajaxUpdateOnlineValueAnnonceAction',  '_route' => 'locazik_admin_annonce_ajax_updateonlinevalue',);
+                }
+
+                if (0 === strpos($pathinfo, '/agrume/annonce/supprimer')) {
+                    // locazik_admin_annonce_ajax_supprimer_image
+                    if ($pathinfo === '/agrume/annonce/supprimerImage') {
+                        return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceAdminController::ajaxSupprimerImageAnnonceAction',  '_route' => 'locazik_admin_annonce_ajax_supprimer_image',);
+                    }
+
+                    // locazik_admin_annonce_ajax_supprimer
+                    if ($pathinfo === '/agrume/annonce/supprimer') {
+                        return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AnnonceAdminController::ajaxSupprimerAnnonceAction',  '_route' => 'locazik_admin_annonce_ajax_supprimer',);
+                    }
+
+                }
+
+            }
+
+            // locazik_admin_categorie_lister
+            if ($pathinfo === '/agrume/liste-categorie') {
+                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\CategorieController::listerCategorieAction',  '_route' => 'locazik_admin_categorie_lister',);
+            }
+
+            if (0 === strpos($pathinfo, '/agrume/categorie')) {
+                // locazik_admin_categorie_ajouter
+                if (rtrim($pathinfo, '/') === '/agrume/categorie/gerer') {
+                    if (substr($pathinfo, -1) !== '/') {
+                        return $this->redirect($pathinfo.'/', 'locazik_admin_categorie_ajouter');
+                    }
+
+                    return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\CategorieController::gererCategorieAction',  '_route' => 'locazik_admin_categorie_ajouter',);
+                }
+
+                // locazik_admin_categorie_detail
+                if (0 === strpos($pathinfo, '/agrume/categorie/detail') && preg_match('#^/agrume/categorie/detail/(?P<id>\\d+)/?$#s', $pathinfo, $matches)) {
+                    if (substr($pathinfo, -1) !== '/') {
+                        return $this->redirect($pathinfo.'/', 'locazik_admin_categorie_detail');
+                    }
+
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_admin_categorie_detail')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\CategorieController::detailCategorieAction',));
+                }
+
+                // locazik_admin_categorie_modifier
+                if (0 === strpos($pathinfo, '/agrume/categorie/gerer') && preg_match('#^/agrume/categorie/gerer/(?P<id>\\d+)/?$#s', $pathinfo, $matches)) {
+                    if (substr($pathinfo, -1) !== '/') {
+                        return $this->redirect($pathinfo.'/', 'locazik_admin_categorie_modifier');
+                    }
+
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'locazik_admin_categorie_modifier')), array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\CategorieController::gererCategorieAction',));
+                }
+
+                // locazik_admin_categorie_ajax_supprimer
+                if (rtrim($pathinfo, '/') === '/agrume/categorie/supprimer') {
+                    if (substr($pathinfo, -1) !== '/') {
+                        return $this->redirect($pathinfo.'/', 'locazik_admin_categorie_ajax_supprimer');
+                    }
+
+                    return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\CategorieController::ajaxSupprimerCategorieAction',  '_route' => 'locazik_admin_categorie_ajax_supprimer',);
+                }
+
+                // locazik_admin_categorie_ajax_updateonlinevalue
+                if ($pathinfo === '/agrume/categorie/updateonlinestatus') {
+                    return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\CategorieController::ajaxUpdateOnlineValueCategorieAction',  '_route' => 'locazik_admin_categorie_ajax_updateonlinevalue',);
+                }
+
+            }
+
+            // locazik_admin_motinterdit_lister
+            if ($pathinfo === '/agrume/liste-mot-interdit') {
+                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\MotInterditController::listerMotAction',  '_route' => 'locazik_admin_motinterdit_lister',);
+            }
+
+            if (0 === strpos($pathinfo, '/agrume/mot-interdit')) {
+                // locazik_admin_motinterdit_creer
+                if (rtrim($pathinfo, '/') === '/agrume/mot-interdit/creer') {
+                    if (substr($pathinfo, -1) !== '/') {
+                        return $this->redirect($pathinfo.'/', 'locazik_admin_motinterdit_creer');
+                    }
+
+                    return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\MotInterditController::creerMotAction',  '_route' => 'locazik_admin_motinterdit_creer',);
+                }
+
+                // locazik_admin_motinterdit_ajax_supprimer
+                if (rtrim($pathinfo, '/') === '/agrume/mot-interdit/supprimer') {
+                    if (substr($pathinfo, -1) !== '/') {
+                        return $this->redirect($pathinfo.'/', 'locazik_admin_motinterdit_ajax_supprimer');
+                    }
+
+                    return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\MotInterditController::ajaxSupprimerMotAction',  '_route' => 'locazik_admin_motinterdit_ajax_supprimer',);
+                }
+
+            }
+
+            // locazik_admin_user_lister
+            if ($pathinfo === '/agrume/liste-utilisateur') {
+                return array (  '_controller' => 'Locazik\\AnnonceBundle\\Controller\\AdminController::indexAction',  '_route' => 'locazik_admin_user_lister',);
             }
 
         }
@@ -368,12 +426,20 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                     return $this->redirect($pathinfo.'/', 'fos_user_profile_show');
                 }
 
-                return array (  '_controller' => 'FOS\\UserBundle\\Controller\\ProfileController::showAction',  '_route' => 'fos_user_profile_show',);
+                return array (  '_controller' => 'Locazik\\UserBundle\\Controller\\AccountController::showAction',  '_route' => 'fos_user_profile_show',);
             }
 
-            // fos_user_profile_edit
-            if ($pathinfo === '/compte/modifier') {
-                return array (  '_controller' => 'FOS\\UserBundle\\Controller\\ProfileController::editAction',  '_route' => 'fos_user_profile_edit',);
+            if (0 === strpos($pathinfo, '/compte/m')) {
+                // fos_user_profile_edit
+                if ($pathinfo === '/compte/modifier') {
+                    return array (  '_controller' => 'Locazik\\UserBundle\\Controller\\AccountController::editAction',  '_route' => 'fos_user_profile_edit',);
+                }
+
+                // locazik_user_annonce_lister
+                if ($pathinfo === '/compte/mes-annonces') {
+                    return array (  '_controller' => 'Locazik\\UserBundle\\Controller\\AccountController::listerAnnonceAction',  '_route' => 'locazik_user_annonce_lister',);
+                }
+
             }
 
         }
@@ -487,16 +553,41 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
         }
         not_fos_user_change_password:
 
-        // _imagine_liste_annonce
-        if (0 === strpos($pathinfo, '/media/cache/liste_annonce') && preg_match('#^/media/cache/liste_annonce/(?P<path>.+)$#s', $pathinfo, $matches)) {
-            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                $allow = array_merge($allow, array('GET', 'HEAD'));
-                goto not__imagine_liste_annonce;
-            }
+        if (0 === strpos($pathinfo, '/media/cache')) {
+            // _imagine_liste_annonce
+            if (0 === strpos($pathinfo, '/media/cache/liste_annonce') && preg_match('#^/media/cache/liste_annonce/(?P<path>.+)$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not__imagine_liste_annonce;
+                }
 
-            return $this->mergeDefaults(array_replace($matches, array('_route' => '_imagine_liste_annonce')), array (  '_controller' => 'liip_imagine.controller:filterAction',  'filter' => 'liste_annonce',));
+                return $this->mergeDefaults(array_replace($matches, array('_route' => '_imagine_liste_annonce')), array (  '_controller' => 'liip_imagine.controller:filterAction',  'filter' => 'liste_annonce',));
+            }
+            not__imagine_liste_annonce:
+
+            // _imagine_detail_annonce
+            if (0 === strpos($pathinfo, '/media/cache/detail_annonce') && preg_match('#^/media/cache/detail_annonce/(?P<path>.+)$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not__imagine_detail_annonce;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => '_imagine_detail_annonce')), array (  '_controller' => 'liip_imagine.controller:filterAction',  'filter' => 'detail_annonce',));
+            }
+            not__imagine_detail_annonce:
+
+            // _imagine_admin_liste_annonce
+            if (0 === strpos($pathinfo, '/media/cache/admin_liste_annonce') && preg_match('#^/media/cache/admin_liste_annonce/(?P<path>.+)$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not__imagine_admin_liste_annonce;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => '_imagine_admin_liste_annonce')), array (  '_controller' => 'liip_imagine.controller:filterAction',  'filter' => 'admin_liste_annonce',));
+            }
+            not__imagine_admin_liste_annonce:
+
         }
-        not__imagine_liste_annonce:
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }

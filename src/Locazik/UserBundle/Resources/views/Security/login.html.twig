@@ -10,8 +10,8 @@
 <form action="{{ path("fos_user_security_check") }}" method="post">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
 
-    <label for="username">{{ 'security.login.username_mail'|trans }}</label>
-    <input type="text" id="username" name="_username_mail" required="required" />
+    <label for="username">Adresse email : </label>
+    <input type="text" id="username" name="_username" required="required" />
 
     <label for="password">{{ 'security.login.password'|trans }}</label>
     <input type="password" id="password" name="_password" required="required" />

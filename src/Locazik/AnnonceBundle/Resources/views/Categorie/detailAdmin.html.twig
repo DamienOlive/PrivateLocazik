@@ -1,0 +1,17 @@
+{% extends "::baseAdmin.html.twig" %}
+
+{% block breadcrumb %}
+    <li><a href="{{ path('locazik_admin') }}"><i class="icon-dashboard"></i> Dashboard</a> / 
+        <a href="{{ path('locazik_admin_categorie_lister') }}"> Gestion catégorie</a> / 
+        <a href="{{ path('locazik_admin_categorie_detail', {id: categorie.id}) }}"> Détail catégorie</a>
+    </li>
+{% endblock %}
+    
+{% block body %}
+    Détail : <br />
+    <a href="{{ path('locazik_admin_categorie_modifier', { 'id': categorie.id }) }}">{{ categorie.categorieName }}</a><br />
+    <strong>Description :</strong> <br /> {{ categorie.categorieDesc }}<br />
+    <strong>Est en ligne : </strong> {{ categorie.isOnline }} <br />
+    <strong>Date Creation</strong> : {{ categorie.dateCreation|date('d-m-Y') }} <br />
+    <strong>Date mise à jour</strong> {{ categorie.dateUpdate|date('d-m-Y') }}
+{% endblock %}

@@ -66,4 +66,38 @@ class AnnonceRepository extends EntityRepository
         
         return $listeAnnonces;
     }
+    
+    public function countAnnonces($online = null)
+    {
+        $queryBuilder = $this->_em->createQueryBuilder();
+        $qb = $queryBuilder->select('COUNT(a)')->from($this->_entityName, 'a');
+        if($online !== null)
+        {
+            $qb->where('a.isOnline = :isOnline')
+               ->setParameter('isOnline', $online);
+        }
+        $query = $qb->getQuery()->getSingleScalarResult();
+        return $query;
+    }
+    
+    public function countAnnoncesFromUser($user)
+    {
+        $queryBuilder = $this->_em->createQueryBuilder();
+        return $queryBuilder->select('COUNT(a)')
+                     ->from($this->_entityName, 'a')
+                     ->where('a.user = :user')
+                     ->setParameter('user', $user)
+                     ->getQuery()
+                     ->getSingleScalarResult();
+    }
+    
+    public function countAnnoncesByDay($day)
+    {
+        $queryBuilder = $this->_em->createQueryBuilder();
+        $qb = $queryBuilder->select('a')
+                           ->from($this->_entityName, 'a')
+                           ->where("DATE( dateCreation ) = DATE( DATE_SUB(NOW( ), INTERVAL 0 DAY))");
+        
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 }

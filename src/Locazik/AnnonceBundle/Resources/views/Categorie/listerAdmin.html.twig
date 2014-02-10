@@ -1,0 +1,160 @@
+{% extends "::baseAdmin.html.twig" %}
+
+{% block breadcrumb %}
+    <li><a href="{{ path('locazik_admin') }}"><i class="icon-dashboard"></i> Dashboard</a> / 
+        <a href="{{ path('locazik_admin_categorie_lister') }}"> Gestion catégorie</a>
+    </li>
+{% endblock %}
+    
+{% block body %}
+<h2>Gestion des catégorie</h2>
+<br />
+<div class="alert alert-danger">
+    <p>
+        <strong>Attention !</strong> Si vous supprimez une catégorie, 
+        toutes les annonces qui y sont rattachées seront également supprimées.<br />
+        Si vous supprimez une catégorie qui est parente d'autres catégories, toutes ces catégories
+        et leurs annonces rattachées seront elles aussi supprimées.<br />
+        Soyez donc <strong>vigilant</strong> !
+    </p>
+</div>
+<br />
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Dernière modification</th>
+            <th>Catégorie parente</th>
+            <th>Online/Offline</th>
+            <th>Editer/Supprimer</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for categorieParent in listeCategoriesParent %}
+    {# { dump(categorie.parent) } #}
+    <tr id="{{ 'line_'~categorieParent.id }}" class="{#{ 'lineChild_'~categorie.parent.id }#}">
+        <td>
+        <a href="{{ path('locazik_admin_categorie_modifier', { 'id': categorieParent.id }) }}">
+            {{ categorieParent.categorieName|e }}
+        </a>
+        </td>
+        <td>
+            {{ categorieParent.dateUpdate|date('d-m-Y') }}
+        </td>
+        <td>
+        </td>
+        <td>
+            {% if categorieParent.isOnline == true %}
+                <span id="{{ 'onlineStatus_'~categorieParent.id }}" onclick="updateOnlineStatusConfirm({{categorieParent.id}});" 
+                      class="label label-success pointer">Online</span>
+            {% else %}
+                <span id="{{ 'onlineStatus_'~categorieParent.id }}" onclick="updateOnlineStatusConfirm({{categorieParent.id}});" 
+                      class="label label-danger pointer">Offline</span>
+            {% endif %}
+        </td>
+        <td>
+            <a href="{{path('locazik_admin_categorie_modifier', {id: categorieParent.id}) }}" class="btn btn-info btn-default">Editer <i class="icon-pencil"></i></a>
+            <input type="button" value="Supprimer" onclick="removeCategorieConfirm({{categorieParent.id}});" class="btn btn-danger btn-default remove_fields" />
+        </td>
+    </tr>
+        {% for childCategorie in categorieParent.getChildren() %}
+            <tr id="{{ 'line_'~childCategorie.id }}" class="{{ 'lineParent_'~categorieParent.id }}">
+                <td style="padding-left:30px;">
+                <a href="{{ path('locazik_admin_categorie_modifier', { 'id': childCategorie.id }) }}">
+                    {{ childCategorie.categorieName|e }}
+                </a>
+                </td>
+                <td>
+                    {{ childCategorie.dateUpdate|date('d-m-Y') }}
+                </td>
+                <td>
+                    {{ categorieParent.getCategorieName() }}
+                </td>
+                <td>
+                    {% if childCategorie.isOnline == true %}
+                        <span id="{{ 'onlineStatus_'~childCategorie.id }}" onclick="updateOnlineStatusConfirm({{childCategorie.id}});" 
+                              class="label label-success pointer">Online</span>
+                    {% else %}
+                        <span id="{{ 'onlineStatus_'~childCategorie.id }}" onclick="updateOnlineStatusConfirm({{childCategorie.id}});" 
+                              class="label label-danger pointer">Offline</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{path('locazik_admin_categorie_modifier', {id: childCategorie.id}) }}" class="btn btn-info btn-default">Editer <i class="icon-pencil"></i></a>
+                    <input type="button" value="Supprimer" onclick="removeCategorieConfirm({{childCategorie.id}});" class="btn btn-danger btn-default remove_fields" />
+                </td>
+            </tr>
+        {% endfor %}
+    {% endfor %}
+    </tbody>
+</table>
+<br />
+<a href="{{ path('locazik_admin_categorie_ajouter') }}" class="btn btn-info btn-default">Ajouter une nouvelle catégorie <i class="icon-plus"></i></a>
+
+
+<script type="text/javascript">
+    var removeCategorieConfirm = function(id) {
+        BootstrapDialog.show({
+            type: BootstrapDialog.TYPE_DANGER,
+            title: 'Confirmation',
+            message: 'Etes-vous sur de vouloir supprimer l\'enregistrement ?',
+            buttons: [{
+                label: 'Annuler',
+                action: function(dialogRef){    
+                    dialogRef.close();
+                }
+            }, {
+                cssClass: 'btn-danger',
+                label: 'Confirmer',
+                action: function(dialogRef){    
+                    removeCategorie(id);
+                    dialogRef.close();
+                }
+            }]
+        }); 
+    }
+    
+    var removeCategorie = function (id) {
+        $.post( "{{ path('locazik_admin_categorie_ajax_supprimer') }}", { id: id } );
+        $('#line_'+id).slideUp();
+        $('.lineChild_'+id).slideUp();
+    }
+    
+    var updateOnlineStatusConfirm = function(id) {
+        BootstrapDialog.show({
+            type: BootstrapDialog.TYPE_DANGER,
+            title: 'Confirmation',
+            message: 'Etes-vous sur de vouloir modifier le status (online/offline) de l\'enregistrement ?',
+            buttons: [{
+                label: 'Annuler',
+                action: function(dialogRef){    
+                    dialogRef.close();
+                }
+            }, {
+                cssClass: 'btn-danger',
+                label: 'Confirmer',
+                action: function(dialogRef){    
+                    updateOnlineStatus(id);
+                    dialogRef.close();
+                }
+            }]
+        }); 
+    }
+    
+    var updateOnlineStatus = function (id) {
+        var online = true;
+        if($('#onlineStatus_'+id).hasClass('label-success')){
+            online = false;
+            $('#onlineStatus_'+id).removeClass('label-success').addClass('label-danger');
+            $('#onlineStatus_'+id).html('Offline');
+        }else{
+            $('#onlineStatus_'+id).removeClass('label-danger').addClass('label-success');
+            $('#onlineStatus_'+id).html('Online');
+        }
+        $.post( "{{ path('locazik_admin_categorie_ajax_updateonlinevalue') }}", { id: id, isOnline: online });
+    }
+</script>
+
+{% endblock %}

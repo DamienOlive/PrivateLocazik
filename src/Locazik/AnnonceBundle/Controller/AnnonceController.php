@@ -12,17 +12,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AnnonceController extends Controller
 {
-    public function indexAction()
-    {
-        
-    }
-    
     public function creerAnnonceAction()
     {
         $annonce = new Annonce();
         $entityManager = $this->getDoctrine()->getManager();
-        
-        $listeCategories = $this->get('categorie_service')->listerCategorieService($entityManager);
+        $listeCategories = $this->get('categorie_manager')->findListeCategorieOnline();
         $form = $this->createForm(new AnnonceType($entityManager, $listeCategories), $annonce);
         
         $request = $this->get('request');
@@ -38,7 +32,6 @@ class AnnonceController extends Controller
                     $annonce->setVille($ville)
                             ->setDepartement($ville->getDepartement())
                             ->setRegion($ville->getDepartement()->getRegion());
-
                     $imageAnnonces = $annonce->getImageAnnonces();
 
                     // possibilité d'upload plusieurs fichiers
@@ -50,22 +43,18 @@ class AnnonceController extends Controller
                             $imageAnnonce->upload();
                         }   
                     }
-
-
-                    /*
-                    gerer controle insertion image ici malgré le controle plus haut
-                    supprimer image quand pas d upload
-                    */
-
-                    $entityManager->persist($annonce);
-                    $entityManager->flush();
+                    $this->get('annonce_manager')->saveAnnonce($annonce);
                     return $this->redirect($this->generateUrl('locazik_user_login_before_confirm', 
                                                                 array('annonceKey' => $annonce->getAnnonceKey())));
                 }
             }
         }
-        
         return $this->render('LocazikAnnonceBundle:Annonce:creer.html.twig', array('form' => $form->createView()));
+    }
+    
+    public function confirmerCreationAnnonceAction()
+    {
+        return $this->render('LocazikAnnonceBundle:Annonce:confirmerCreation.html.twig');
     }
     
     public function listerAnnonceAction($categorieUrlName, $regionUrlName = null, $depUrlName = null, $villeUrlName = null)
@@ -142,83 +131,11 @@ class AnnonceController extends Controller
                 array('region' => $region, 'listeAnnonces' => $listeAnnonces, 'data' => $data));
     }
     
-    
-    // ADMINISTRATION
-    // Permet de passer une annonce online/offline
-    public function validerAnnonceAction($id)
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        $annonceRepository = $entityManager->getRepository('LocazikAnnonceBundle:Annonce');
-        $annonce = $annonceRepository->find($id);
-        
-        $form = $this->createForm(new AnnonceValidationType(), $annonce);
-        
-        $request = $this->get('request');
-        
-        if($request->getMethod() === 'POST')
-        {
-            $form->bind($request);
-            if($form->isValid())
-            {
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($annonce);
-                //$entityManager->persist($image);
-                $entityManager->flush();
-                return $this->redirect($this->generateUrl('locazik_annonce_lister'));
-            }
-        }
-        
-        return $this->render('LocazikAnnonceBundle:Annonce:validation.html.twig', array('form' => $form->createView()));
-    }
-    
-    public function listerAnnonceAdminAction()
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        $annonceRepository = $entityManager->getRepository('LocazikAnnonceBundle:Annonce');
-        $listeAnnonces = $annonceRepository->findAll();
-        
-        return $this->render('LocazikAnnonceBundle:Annonce:lister.html.twig', array('listeAnnonces' => $listeAnnonces));
-    }
-    
     public function detailAnnonceAction($id)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $annonceRepository = $entityManager->getRepository('LocazikAnnonceBundle:Annonce');
-        $annonce = $annonceRepository->find($id);
+        $annonce = $this->get('annonce_manager')->loadAnnonce($id);
         
         return $this->render('LocazikAnnonceBundle:Annonce:detail.html.twig', array('annonce' => $annonce));
-    }
-    
-    public function supprimerAnnonceAction($id)
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        $annonceRepository = $entityManager->getRepository('LocazikAnnonceBundle:Annonce');
-        $annonce = $annonceRepository->find($id);
-        
-        $entityManager->remove($annonce);
-        $entityManager->flush();
-        
-        return $this->render('LocazikAnnonceBundle:Annonce:listeAnnonces.html.twig');
-    }
-    
-    public function confirmerCreationAnnonceAction()
-    {
-        return $this->render('LocazikAnnonceBundle:Annonce:confirmerCreation.html.twig');
-    }
-    
-    public function insertUserAnnonceService($entityManager, $annonceKey, $user)
-    {
-        $annonceRepository = $entityManager->getRepository('LocazikAnnonceBundle:Annonce');
-        $annonce = $annonceRepository->findOneBy(array('annonceKey' => $annonceKey));
-        
-        if($annonce !== null)
-        {
-            $annonce->setUser($user);
-            $entityManager->persist($annonce);
-            $entityManager->flush();
-            return true;
-        }
-        return false;
     }
     
     private function genereAnnonceListeUrl($data)
@@ -295,8 +212,7 @@ class AnnonceController extends Controller
         $isAjax = $this->get('request')->isXMLHttpRequest();
         if($isAjax && $annonceKey)
         {
-            $annonce = $this->getDoctrine()->getManager()->getRepository('LocazikAnnonceBundle:Annonce')
-                                                                ->findOneBy(array('annonceKey' => $annonceKey));
+            $annonce = $this->get('annonce_manager')->findOneBy(array('annonceKey' => $annonceKey));
             if($annonce !== null)
             {
                 $tel = $annonce->getNumeroTel();

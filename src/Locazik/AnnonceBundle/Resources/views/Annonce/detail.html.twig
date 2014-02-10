@@ -15,7 +15,8 @@ Contacter l'annonceur : <div id="affNumTelAnnonce">Cliquez pour voir le numéro 
 <strong>Prix à la journée : </strong> {{ annonce.annoncePrix }}€ <br />
 
 {% for image in annonce.getImageAnnonces() %}
-    <img src="{{ asset(image.getUploadDir()~image.getImageName()) }}" width="300" />
+    {% set imageLink = image.getUploadDir()~image.getImageName() %}
+    <img src="{{ imageLink | imagine_filter('detail_annonce') }}" />
 {% endfor %}
 <br />
 

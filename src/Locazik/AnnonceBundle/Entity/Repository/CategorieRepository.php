@@ -32,8 +32,7 @@ class CategorieRepository extends EntityRepository
         return $listeAnnonceParent = $queryBuilder
                 ->select('c')
                 ->from($this->_entityName, 'c')
-                ->where('c.isOnline = :isOnline AND c.parent IS NULL')
-                ->setParameter('isOnline', true);
+                ->where('c.parent IS NULL');
     }
     
     public function categoriesOrderbyParent()

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>{% block title %}Locazik{% endblock %}</title>
+
+        {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('css/bootstrap-dialog.css') }}" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('css/main.css') }}" type="text/css" />
+        <link href="{{ asset('bundles/locazikannonce/cssAdmin/sb-admin.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('bundles/locazikannonce/font-awesome/css/font-awesome.min.css') }}">
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/redmond/jquery-ui.min.css" 
+              type="text/css" />
+        {% endblock %}
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        {% block menu %}
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ path('locazik_admin') }}">Administration Locazik</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                    <li class="active"><a href="{{ path('locazik_admin') }}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                    <li><a href="{{ path('locazik_admin_stats') }}"><i class="fa fa-bar-chart-o"></i> Statistiques</a></li>
+                    <li><a href="{{ path('locazik_admin_annonce_lister') }}"><i class="fa fa-file"></i> Annonces</a></li>
+                    <li><a href="{{ path('locazik_admin_categorie_lister') }}"><i class="fa fa-edit"></i> Categories</a></li>
+                    <li><a href="{{ path('locazik_admin_motinterdit_lister') }}"><i class="fa fa-font"></i> Mots Interdits</a></li>
+                    <li><a href="{{ path('locazik_admin_user_lister') }}"><i class="fa fa-user"></i> Utilisateurs</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right navbar-user">
+                    <li class="dropdown alerts-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span class="badge">3</span> <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Default <span class="label label-default">Default</span></a></li>
+                            <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
+                            <li><a href="#">Success <span class="label label-success">Success</span></a></li>
+                            <li><a href="#">Info <span class="label label-info">Info</span></a></li>
+                            <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
+                            <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">View All</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown user-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{ app.user.username }} <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#"><i class="fa fa-gear"></i> Configuration</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{{ path('fos_user_security_logout') }}"><i class="fa fa-power-off"></i> Déconnexion</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+        {% endblock %}
+
+        <div id="page-wrapper">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    {% block titre %}
+                    {% endblock %}
+                    <ol class="breadcrumb">
+                        {% block breadcrumb %}
+                        {% endblock %}
+                    </ol>
+                </div>
+            </div><!-- /.row -->
+            {% block body %}
+
+            {% endblock %}
+        </div><!-- /#page-wrapper -->
+
+    </div><!-- /#wrapper -->
+
+    {% block javascripts %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="{{ asset('js/bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/bootstrap-dialog.js') }}"></script>
+    {% endblock %}
+
+    </body>
+</html>

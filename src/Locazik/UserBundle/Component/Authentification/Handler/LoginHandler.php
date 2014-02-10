@@ -25,12 +25,12 @@ class LoginHandler implements AuthenticationFailureHandlerInterface, Authenticat
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token) 
     {
-        $referer = $request->headers->get('referer');
-        /* if (strpos($referer,'annonce/identification') !== false) 
-          {
-
-          } */
-        return new RedirectResponse($referer);
+        $url = $request->headers->get('referer');
+        if ($this->security->isGranted('ROLE_ADMIN'))
+        {
+            $url = $this->router->generate('locazik_admin');
+        }
+        return new RedirectResponse($url);
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)

@@ -6,66 +6,60 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Locazik\AnnonceBundle\Entity\Categorie;
 use Locazik\AnnonceBundle\Form\Type\CategorieType;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CategorieController extends Controller
-{
-    public function listerCategorieService($entityManager)
-    {
-        $listeParentCategories = $entityManager->getRepository('LocazikAnnonceBundle:Categorie')
-                                               ->listeCategorieOnline();
-        
-        $listeCategorieOptions = array();
-        foreach($listeParentCategories as $parentCategorie){
-            foreach($parentCategorie->getChildren() as $child){
-                $listeCategorieOptions[$parentCategorie->getCategorieName()][$child->getId()] = $child->getCategorieName();
-            }
-        }
-        //var_dump($listeCategorieOptions);exit();
-        return $listeCategorieOptions;
-    }
-    
+{    
     public function listerCategorieAction()
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $categorieRepository = $entityManager->getRepository('LocazikAnnonceBundle:Categorie');
-        $listeCategories = $categorieRepository->categoriesOrderbyParent();
-        
-        return $this->render('LocazikAnnonceBundle:Categorie:lister.html.twig', array('listeCategories' => $listeCategories));
+        //$listeCategories = $this->get('categorie_manager')->findCategoriesOrderbyParent();
+        $listeCategoriesParent = $this->get('categorie_manager')->findListBy(array('parent' => null));
+        return $this->render('LocazikAnnonceBundle:Categorie:listerAdmin.html.twig', 
+                                            array('listeCategoriesParent' => $listeCategoriesParent));
     }
     
     public function ajaxSupprimerCategorieAction()
     {
         $isAjax = $this->get('request')->isXMLHttpRequest();
         $id = $this->get('request')->request->get('id');
-        if($isAjax)
+        if($isAjax && $id != null)
         {
-            if($id != null)
+            $response = false;
+            $categorie = $this->get('categorie_manager')->loadCategorie($id);
+            if($categorie)
             {
-                $entityManager = $this->getDoctrine()->getManager();
-                $categorieRepository = $entityManager->getRepository('LocazikAnnonceBundle:Categorie');
-                $categorie = $categorieRepository->find($id);
-                $entityManager->remove($categorie);
-                $entityManager->flush();
-                
-                $response = new Response(json_encode(array('result' => 'success')));
+                $this->get('categorie_manager')->removeCategorie($categorie);
+                $response = true;
             }
-            else
+            return new JsonResponse($response);
+        }
+    }
+    
+    public function ajaxUpdateOnlineValueCategorieAction()
+    {
+        $isAjax = $this->get('request')->isXMLHttpRequest();
+        $id = $this->get('request')->request->get('id');
+        $online = $this->get('request')->request->get('isOnline', true);
+        $onlineValue = $online === 'true'? true: false;
+        if($isAjax && $id != null)
+        {
+            $result = false;
+            $categorie = $this->get('categorie_manager')->loadCategorie($id);
+            if($categorie)
             {
-                $response = new Response(json_encode(array('result' => 'failure')));
+                $categorie->setIsOnline($onlineValue);
+                $this->get('categorie_manager')->saveCategorie($categorie);
+                $result = true;
             }
-            $response->headers->set('Content-Type', 'application/json');
-
-            return $response;
-        }    
+            return new JsonResponse($result);
+        }
     }
     
     public function gererCategorieAction($id = null)
     {
-        $entityManager = $this->getDoctrine()->getManager();     
         if($id)
         {           
-            $categorieRepository = $entityManager->getRepository('LocazikAnnonceBundle:Categorie');
-            $categorie = $categorieRepository->find($id);
+            $categorie = $this->get('categorie_manager')->loadCategorie($id);
             $categorie->setDateUpdate(new \Datetime());
         }
         else
@@ -84,23 +78,27 @@ class CategorieController extends Controller
             {
                 $toolBox = $this->get('urlify_helper');
                 $categorieName = $categorie->getCategorieName();
-                $categorieUrl = $toolBox::filter($categorie->getParent()->getCategorieUrl().'-'.$categorieName);
+                if($categorie->getParent())
+                {
+                    $categorieUrl = $toolBox::filter($categorie->getParent()->getCategorieUrl().'-'.$categorieName);
+                }
+                else
+                {
+                    $categorieUrl = $toolBox::filter($categorieName);
+                }
                 $categorie->setCategorieUrl($categorieUrl);
                 $categorie->setCategorieName(ucfirst($categorieName));
-                $entityManager->persist($categorie);
-                $entityManager->flush();
-                return $this->redirect( $this->generateUrl('locazik_categorie_detail', array('id' => $categorie->getId())) );   
+                $this->get('categorie_manager')->saveCategorie($categorie);
+                return $this->redirect( $this->generateUrl('locazik_admin_categorie_detail', array('id' => $categorie->getId())) );   
             }
         }
-        return $this->render('LocazikAnnonceBundle:Categorie:gerer.html.twig', array('form' => $form->createView()));
+        return $this->render('LocazikAnnonceBundle:Categorie:gererAdmin.html.twig', 
+                                array('form' => $form->createView(), 'categorie' => $categorie));
     }
     
     public function detailCategorieAction($id)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $categorieRepository = $entityManager->getRepository('LocazikAnnonceBundle:Categorie');
-        $categorie = $categorieRepository->find($id);
-        
-        return $this->render('LocazikAnnonceBundle:Categorie:detail.html.twig', array('categorie' => $categorie));
+        $categorie = $this->get('categorie_manager')->loadCategorie($id);
+        return $this->render('LocazikAnnonceBundle:Categorie:detailAdmin.html.twig', array('categorie' => $categorie));
     }
 }

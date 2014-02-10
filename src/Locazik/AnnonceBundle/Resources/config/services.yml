@@ -6,11 +6,24 @@ services:
 #        class: %locazik_categorie.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
 
-    categorie_service:
-        class: Locazik\AnnonceBundle\Controller\CategorieController
     geo_service:
         class: Locazik\AnnonceBundle\Controller\GeoController
-    annonce_service:
-        class: Locazik\AnnonceBundle\Controller\AnnonceController
+        
+    categorie_manager:
+        class: Locazik\AnnonceBundle\Manager\CategorieManager
+        arguments:
+            entityManager: "@doctrine.orm.entity_manager"
+    annonce_manager:
+        class: Locazik\AnnonceBundle\Manager\AnnonceManager
+        arguments:
+            entityManager: "@doctrine.orm.entity_manager"
+    image_annonce_manager:
+        class: Locazik\AnnonceBundle\Manager\ImageAnnonceManager
+        arguments:
+            entityManager: "@doctrine.orm.entity_manager"
+    mot_interdit_manager:
+        class: Locazik\AnnonceBundle\Manager\MotInterditManager
+        arguments:
+            entityManager: "@doctrine.orm.entity_manager"
     urlify_helper:
         class: Locazik\AnnonceBundle\Helper\URLify

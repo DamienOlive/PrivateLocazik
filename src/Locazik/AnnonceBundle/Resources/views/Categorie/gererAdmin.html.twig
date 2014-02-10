@@ -1,0 +1,24 @@
+{% extends "::baseAdmin.html.twig" %}
+
+{% block breadcrumb %}
+    <li><a href="{{ path('locazik_admin') }}"><i class="icon-dashboard"></i> Dashboard</a> / 
+        <a href="{{ path('locazik_admin_categorie_lister') }}"> Gestion catégorie</a> / 
+        {% if categorie.id is not null %}
+            <a href="{{ path('locazik_admin_categorie_modifier', {id: categorie.id}) }}"> Modification catégorie</a>
+        {% else %}
+            <a href="{{ path('locazik_admin_categorie_ajouter') }}"> Création catégorie</a>
+        {% endif %}
+    </li>
+{% endblock %}
+    
+{% block body %}
+<div class="well">
+    <h3>Gérer la catégorie</h3>
+    {# Les erreurs générales du formulaire. #}
+    {{ form_errors(form) }}
+    <form method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <input type="submit" class="btn btn-info" />
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+locazik_admin:
+    pattern:  /
+    defaults: { _controller: LocazikAnnonceBundle:Admin:index }
+    
+locazik_admin_stats:
+    pattern:  /statistique
+    defaults: { _controller: LocazikAnnonceBundle:Admin:statistique }
+    
+    
+    
+locazik_admin_annonce_lister:
+    pattern:  /liste-annonce
+    defaults: { _controller: LocazikAnnonceBundle:AnnonceAdmin:listerAnnonce }
+    
+locazik_admin_annonce_lister_offline:
+    pattern:  /liste-annonce/offline
+    defaults: { _controller: LocazikAnnonceBundle:AnnonceAdmin:listerAnnonceOffline }
+    
+locazik_admin_annonce_modifier:
+    pattern:  /annonce/modifier/{id}
+    defaults: { _controller: LocazikAnnonceBundle:AnnonceAdmin:modifierAnnonce }
+    
+locazik_admin_annonce_ajax_updateonlinevalue:
+    pattern:  /annonce/updateonlinestatus
+    defaults: { _controller: LocazikAnnonceBundle:AnnonceAdmin:ajaxUpdateOnlineValueAnnonce }
+ 
+locazik_admin_annonce_ajax_supprimer_image:
+    pattern:  /annonce/supprimerImage
+    defaults: { _controller: LocazikAnnonceBundle:AnnonceAdmin:ajaxSupprimerImageAnnonce }
+    
+locazik_admin_annonce_ajax_supprimer:
+    pattern:  /annonce/supprimer
+    defaults: { _controller: LocazikAnnonceBundle:AnnonceAdmin:ajaxSupprimerAnnonce }
+    
+    
+    
+locazik_admin_categorie_lister:
+    pattern:  /liste-categorie
+    defaults: { _controller: LocazikAnnonceBundle:Categorie:listerCategorie }
+    
+locazik_admin_categorie_ajouter:
+    pattern:  /categorie/gerer/
+    defaults: { _controller: LocazikAnnonceBundle:Categorie:gererCategorie }
+    
+locazik_admin_categorie_detail:
+    pattern:  /categorie/detail/{id}/
+    defaults: { _controller: LocazikAnnonceBundle:Categorie:detailCategorie }
+    requirements:
+        id:  \d+
+    
+locazik_admin_categorie_modifier:
+    pattern:  /categorie/gerer/{id}/
+    defaults: { _controller: LocazikAnnonceBundle:Categorie:gererCategorie }
+    requirements:
+        id:  \d+
+    
+locazik_admin_categorie_ajax_supprimer:
+    pattern:  /categorie/supprimer/
+    defaults: { _controller: LocazikAnnonceBundle:Categorie:ajaxSupprimerCategorie }  
+    
+locazik_admin_categorie_ajax_updateonlinevalue:
+    pattern:  /categorie/updateonlinestatus
+    defaults: { _controller: LocazikAnnonceBundle:Categorie:ajaxUpdateOnlineValueCategorie }
+    
+    
+    
+locazik_admin_motinterdit_lister:
+    pattern:  /liste-mot-interdit
+    defaults: { _controller: LocazikAnnonceBundle:MotInterdit:listerMot }
+
+locazik_admin_motinterdit_creer:
+    pattern:  /mot-interdit/creer/
+    defaults: { _controller: LocazikAnnonceBundle:MotInterdit:creerMot } 
+    
+locazik_admin_motinterdit_ajax_supprimer:
+    pattern:  /mot-interdit/supprimer/
+    defaults: { _controller: LocazikAnnonceBundle:MotInterdit:ajaxSupprimerMot } 
+    
+    
+    
+locazik_admin_user_lister:
+    pattern:  /liste-utilisateur
+    defaults: { _controller: LocazikAnnonceBundle:Admin:index }

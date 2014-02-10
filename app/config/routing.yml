@@ -5,6 +5,10 @@ locazik_user:
 locazik_categorie:
     resource: "@LocazikAnnonceBundle/Resources/config/routing.yml"
     prefix:   /
+    
+locazik_admin:
+    resource: "@LocazikAnnonceBundle/Resources/config/admin.yml"
+    prefix:   /agrume
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"

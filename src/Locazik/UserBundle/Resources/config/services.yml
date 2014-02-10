@@ -7,3 +7,7 @@ services:
         arguments: [%fos_user.model.user.class%]
         tags:
             - { name: form.type, alias: locazik_userbundle_userregistration }
+    user_manager:
+        class: Locazik\UserBundle\Manager\UserManager
+        arguments:
+            entityManager: "@doctrine.orm.entity_manager"
